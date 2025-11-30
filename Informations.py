@@ -118,7 +118,7 @@ class Info_Spells:
             'HP   :',
             'MN   :',
             'CD   :',
-            'DMG  :',
+            'DMG :',
             'MS   :',
         ]
 

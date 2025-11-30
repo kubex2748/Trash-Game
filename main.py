@@ -40,6 +40,7 @@ class Start_Menu:
         self.MAX_SCORE = 0
         self.LEVEL = 0          #admin = 0
         self.LOGED = False
+        self.COINS = 0
 
         self.FX_active = True
 
@@ -191,6 +192,7 @@ class Start_Menu:
 
             '''-----PLAYER_STATS-----'''
             window.blit(self.player_img, (670, 370))
+            window.blit(pygame.font.Font.render(self.arial_16, f'COINS: {self.COINS}', True, (0, 0, 0)), (750, 320))
             player_labels_iter = 350
             for ch in range(0, 5):
                 window.blit(self.player_info_labels[ch], (750, player_labels_iter))
@@ -236,6 +238,7 @@ class Start_Menu:
                     lvl.pause = False
                     lvl.run = True
                     lvl.start()
+                    self.COINS += lvl.player.coins
                     if self.LEVEL == 1 and lvl.get_win():
                         self.LEVEL += 1
                 else:
