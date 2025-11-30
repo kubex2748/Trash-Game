@@ -57,6 +57,8 @@ class Player(Physic, Health):
         self.global_spell = None
         self.global_spell_choose()
 
+        self.coins = 0
+
     def global_spell_choose(self):
         if self.ID == 0:
             self.fx.error_sound(0.5)

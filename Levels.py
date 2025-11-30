@@ -1,3 +1,5 @@
+from random import randint
+
 import pygame
 #import json
 from math import floor
@@ -5,6 +7,7 @@ from math import floor
 from Sound_Controller import FX
 from Player import Player
 from Wall import Wall
+from Drops import HP_Potion, Mana_Potion, Coin
 from Menu import Button
 from GUI import GUI
 from Informations import Stats, Waves_Tab, Walls_Position
@@ -49,6 +52,11 @@ class Levels:
         self.admin_mod = False
         if player_lvl == 0:
             self.admin_mod = True
+
+        '''----DROPS----'''
+        self.clock_drops = 0
+        self.drop_time = 10
+        self.drops = []
 
         '''----SPELLS----'''
         self.spells = stand_spells
@@ -187,6 +195,7 @@ class LVL1(Levels):
             if self.admin_mod:
                 self.fps_text = pygame.font.Font.render(self.arial_42, f'FPS: {floor(self.clock_obj.get_fps())}', True, (0, 0, 0))
                 window.blit(self.fps_text, (1750, 10))
+            window.blit(pygame.font.Font.render(self.arial_42, f'COINS: {self.player.coins}', True, (0, 0, 0)), (10, 10))
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:  # jeśli gracz zamknie okienko
@@ -248,12 +257,26 @@ class LVL1(Levels):
             for enemy in self.enemies:
                 if not enemy.alive:
                     x, y = enemy.x_cord, enemy.y_cord - 50
+                    self.drops.append(Coin(window, x, y))
                     if self.player.current_mana < self.player.max_mana and self.player.current_mana + self.bonus_mana < self.player.max_mana:
                         self.player.current_mana += self.bonus_mana
                     self.enemies.remove(enemy)
                     self.death_animation(window, x, y)
                 if len(self.enemies) == 0:
                     self.wave_itterator += 1
+
+            """----DROPS----"""
+            self.clock_drops += delta
+            if self.clock_drops >= self.drop_time:
+                if randint(0, 4) == 0:
+                    self.drops.append(Mana_Potion(window, 30))
+                else:
+                    self.drops.append(HP_Potion(window, 30))
+                self.clock_drops = 0
+            for d in self.drops:
+                if d.tick(self.player, self.walls):
+                    self.drops.remove(d)
+                d.draw()
 
             """----PLAYER----"""
             self.player.tick(keys, self.walls, delta, self.enemies)

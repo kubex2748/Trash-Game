@@ -154,7 +154,6 @@ class Start_Menu:
 
             window.blit(self.bg, (0, 0))
 
-            print(self.LEVEL)
             '''-----LOGIN-----'''
             self.NICKNAME = self.nick_input.tick(self.clock, events, delta)
             if self.NICKNAME != '':
@@ -232,7 +231,7 @@ class Start_Menu:
                 self.lvl_7_activ = True
 
             if self.lvl1_button.tick():
-                if self.choose_wand_iter <= self.LEVEL:
+                if self.choose_wand_iter <= self.LEVEL or self.LEVEL == 0:
                     lvl = LVL1(self.wand_id, self.FX_active, [0, 1, 2], self.LEVEL)      #self.wand_id, self.FX_active, self.standard_spells
                     lvl.pause = False
                     lvl.run = True
@@ -246,7 +245,7 @@ class Start_Menu:
             window.blit(self.lvl1_info_bot, (335, 705))
 
             if self.lvl2_button.tick(not self.lvl_2_activ):
-                if self.choose_wand_iter + 1 <= self.LEVEL:
+                if self.choose_wand_iter + 1 <= self.LEVEL or self.LEVEL == 0:
                     lvl = LVL2(self.wand_id, self.FX_active, [0, 1, 2], self.LEVEL)
                     lvl.pause = False
                     lvl.run = True
@@ -269,7 +268,7 @@ class Start_Menu:
             window.blit(self.lvl3_info_bot, (633, 705))
 
             if self.lvl4_button.tick(not self.lvl_4_activ):
-                if self.choose_wand_iter + 1 <= self.LEVEL:
+                if self.choose_wand_iter + 1 <= self.LEVEL or self.LEVEL == 0:
                     pass
                 else:
                     self.fx.error_sound(0.3)
@@ -278,7 +277,7 @@ class Start_Menu:
             window.blit(self.lvl4_info_bot, (783, 705))
 
             if self.lvl5_button.tick(not self.lvl_5_activ):
-                if self.choose_wand_iter + 1 <= self.LEVEL:
+                if self.choose_wand_iter + 1 <= self.LEVEL or self.LEVEL == 0:
                     pass
                 else:
                     self.fx.error_sound(0.3)
@@ -287,7 +286,7 @@ class Start_Menu:
             window.blit(self.lvl5_info_bot, (933, 705))
 
             if self.lvl6_button.tick(not self.lvl_6_activ):
-                if self.choose_wand_iter + 1 <= self.LEVEL:
+                if self.choose_wand_iter + 1 <= self.LEVEL or self.LEVEL == 0:
                     pass
                 else:
                     self.fx.error_sound(0.3)
