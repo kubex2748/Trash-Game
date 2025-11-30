@@ -41,6 +41,8 @@ class Start_Menu:
         self.LEVEL = 0          #admin = 0
         self.LOGED = False
         self.COINS = 0
+        if self.LEVEL == 0:
+            self.COINS = 100
 
         self.FX_active = True
 
@@ -126,6 +128,14 @@ class Start_Menu:
         self.info_3 = Info_area(1015, 415, 50, 50)
         self.standard_spells = [0, 1, 2]
 
+        self.coins_req_upgrade = 10
+        self.upgrade_buttons = []
+        ub_y = 350
+
+        for b in range(0, 5):
+            self.upgrade_buttons.append(Button(720, ub_y, "graph/menu/upgrade"))
+            ub_y += 25
+
         self.char_labels = []
         self.char_list = []
         self.first_y = 350
@@ -135,14 +145,14 @@ class Start_Menu:
             self.char_labels.append(pygame.font.Font.render(self.arial_16, self.s_info.char_list_name[ch], True, (0, 0, 0)))
             char_y += 23
 
-        stats = Stats()
+        self.stats = Stats()
         self.player_img = pygame.image.load('graph/player/player_stand.png')
         self.player_stats_labels = []
         self.player_info_labels = []
         for ch in range(0, 5):
             self.player_info_labels.append(pygame.font.Font.render(self.arial_16, self.s_info.player_info_labels[ch], True, (0, 0, 0)))
         for ch in range(0, 5):
-            self.player_stats_labels.append(pygame.font.Font.render(self.arial_16, f'{stats.player[self.LEVEL][ch+2]}', True, (0, 0, 0)))
+            self.player_stats_labels.append(pygame.font.Font.render(self.arial_16, f'{self.stats.player[self.LEVEL][ch+2]}', True, (0, 0, 0)))
 
     def start(self):
         while self.run:
@@ -191,13 +201,33 @@ class Start_Menu:
                 char_labels_iter += 23
 
             '''-----PLAYER_STATS-----'''
-            window.blit(self.player_img, (670, 370))
+            window.blit(self.player_img, (650, 370))
             window.blit(pygame.font.Font.render(self.arial_16, f'COINS: {self.COINS}', True, (0, 0, 0)), (750, 320))
+            for ch in range(0, 5):
+                self.player_stats_labels[ch] = pygame.font.Font.render(self.arial_16, f'{self.stats.player[self.LEVEL][ch + 2] + self.stats.player_stats_bonus[ch]}', True, (0, 0, 0))
             player_labels_iter = 350
             for ch in range(0, 5):
                 window.blit(self.player_info_labels[ch], (750, player_labels_iter))
                 window.blit(self.player_stats_labels[ch], (795, player_labels_iter))
                 player_labels_iter += 25
+            if self.COINS >= self.coins_req_upgrade:
+                for u in range(0, 5):
+                    if self.upgrade_buttons[0].tick(delta):
+                        self.COINS -= self.coins_req_upgrade
+                        self.stats.player_stats_bonus[0] += 10
+                    elif self.upgrade_buttons[1].tick(delta):
+                        self.COINS -= self.coins_req_upgrade
+                        self.stats.player_stats_bonus[1] += 5
+                    elif self.upgrade_buttons[2].tick(delta):
+                        self.COINS -= self.coins_req_upgrade
+                        self.stats.player_stats_bonus[2] += 0.1
+                    elif self.upgrade_buttons[3].tick(delta):
+                        self.COINS -= self.coins_req_upgrade
+                        self.stats.player_stats_bonus[3] += 2
+                    elif self.upgrade_buttons[4].tick(delta):
+                        self.COINS -= self.coins_req_upgrade
+                        self.stats.player_stats_bonus[4] += 0.2
+                    self.upgrade_buttons[u].draw(window)
 
             '''-----MAP EDITOR-----'''
             if self.editor_menu_active:
