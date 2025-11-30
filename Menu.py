@@ -16,7 +16,7 @@ class Button:
     def tick(self, delta):
         self.clock += delta
         if self.hitbox.collidepoint(pygame.mouse.get_pos()):
-           if pygame.mouse.get_pressed()[0] and self.clock > 0.1:
+           if pygame.mouse.get_pressed()[0] and self.clock > 0.2:
                self.clock = 0.0
                self.fx.accept_sound(0.4)
                return True
