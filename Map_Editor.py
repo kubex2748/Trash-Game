@@ -185,7 +185,6 @@ class Editor:
             if self.draw_prototyp:
                 window.blit(add_value_pointer, (self.x_mouse + 20, self.y_mouse + 40))
 
-
             if self.editor_menu_active:
                 pause_image = pygame.image.load("graph/menu/editor_menu.png")
                 START_button = Button(950, 300, "graph/menu/buttons/button_START")
@@ -214,7 +213,6 @@ class Editor:
                 EXTI_button.draw(window)
                 pygame.display.update()
                 continue
-
 
             pygame.display.update()
 

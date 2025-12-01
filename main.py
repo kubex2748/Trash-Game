@@ -17,24 +17,20 @@ pygame.display.set_caption('TrashGame')
 
 class Start_Menu:
     def __init__(self):
-        self.fx = FX()
-        self.lvl_BONUS_button = Button(1050, 760, "graph/menu/lvl_bonus_icon.png")
-
-
         self.arial_24 = pygame.font.SysFont("arial", 24)
         self.arial_16 = pygame.font.SysFont("arial", 16)
         self.arial_12 = pygame.font.SysFont("arial", 12)
 
+        '''-----Game-----'''
+        self.fx = FX()
+        self.FX_active = True
         self.wand_id = 0
-
         self.links = Links()
         self.wands_set = self.links.wands_set
         self.standard_icon_set = self.links.standard_icon_set
         self.global_set = self.links.global_set_icon
-
         self.run = True
         self.clock = 0
-
         self.bg = pygame.image.load("graph/menu/start_menu.png")
 
         self.ADMIN = True
@@ -46,12 +42,15 @@ class Start_Menu:
         if self.LEVEL == 0:
             self.COINS = 100
 
-        self.FX_active = True
-
+        '''-----Map_Editor-----'''
+        '''
+            With Admin Mode can you easily Create your own Map 4b756261
+        '''
         self.editor_menu_active = False
         self.map_edit_butt = Button(1400, 800, "graph/menu/buttons/button_EDITOR")
         self.editor = Editor()
 
+        '''-----LOGIN-----'''
         # submit_button = Button(270, 450, "graph/menu/buttons/button_SUBMIT")
         self.data_manag = Save_Manager('G:\python_worksapce\Platform_Game\data\data.json')
         self.nick_input = Text_Input(270, 350, 150, 40, 20, 'nickname', True, 270, 450)
@@ -59,6 +58,7 @@ class Start_Menu:
         # max_score = pygame.font.Font.render(self.arial_24, f'', True, (0, 0, 0))
         # current_level = pygame.font.Font.render(self.arial_24, '', True, (0, 0, 0))
 
+        '''-----LVL-----'''
         self.current_lvl = 0
 
         self.info_icon = pygame.image.load('graph/menu/info_icon.png')
@@ -105,6 +105,7 @@ class Start_Menu:
         self.lvl_BONUS_info_top = pygame.font.Font.render(self.arial_16, "Glitch World", True, (0, 0, 0))
         self.lvl_BONUS_info_bot = pygame.font.Font.render(self.arial_16, "BONUS", True, (0, 0, 0))
 
+        '''----SETUP----'''
         self.exit_button = Button(1400, 870, "graph/menu/buttons/button_EXIT")
 
         self.checker_easy = Checker_once(1400, 350, True)
@@ -118,10 +119,23 @@ class Start_Menu:
 
         self.s_info = Info_Spells()
 
+        '''-----Wand-----'''
         self.choose_wand_set = Choose_Continu(990, 330, 870, 330, self.wands_set)
         self.choose_wand_iter = 0
         self.wand_info = Info_area(910, 320, 50, 50)
 
+        '''-----Standard_Spells-----'''
+        '''
+            It doesn't Working right now but i hope someday i have a clu why.
+            
+            It should work like: 
+            You can choose three from 3 (for now) of spells like Heal, Dmg_Burst etc.
+            It can be for example Heal, Heal, Heal or Heal, Heal, Flash dosen't care.
+            
+            You can choose the 1st setup and it work but for other setups it dosent work corretly
+            
+            If u want u can fix it, Have Fun !
+        '''
         self.choose_standard_spell_1 = Choose_Continu(900, 470, 870, 470, self.standard_icon_set)
         self.info_1 = Info_area(865, 415, 50, 50)
         self.choose_standard_spell_2 = Choose_Continu(975, 470, 945, 470, self.standard_icon_set, 1)
@@ -130,6 +144,7 @@ class Start_Menu:
         self.info_3 = Info_area(1015, 415, 50, 50)
         self.standard_spells = [0, 1, 2]
 
+        '''-----Coins/Upgrades-----'''
         self.coins_req_upgrade = 10
         self.upgrade_buttons = []
         ub_y = 350
@@ -138,9 +153,10 @@ class Start_Menu:
             self.upgrade_buttons.append(Button(720, ub_y, "graph/menu/upgrade"))
             ub_y += 25
 
+        '''-----Stats-----'''
+        self.first_y = 350
         self.char_labels = []
         self.char_list = []
-        self.first_y = 350
         char_y = self.first_y
         for ch in range(0, 5):
             self.char_list.append(Button(450, char_y, 'graph/menu/buttons/button_CHAR'))
@@ -158,6 +174,7 @@ class Start_Menu:
 
     def start(self):
         while self.run:
+            '''-----GAME-----'''
             delta = pygame.time.Clock().tick(60) / 1000  # maksymalnie 60 fps
             self.clock += delta
             events = pygame.event.get()
