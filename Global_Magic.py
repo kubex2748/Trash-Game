@@ -20,15 +20,18 @@ class Global_Magic:
         self.spells_s = links.spells
         self.img = pygame.image.load(f'{self.img_list[0]}.png')
 
+
         #print(f'img_list : {self.img_list[spell_id]}')
         #print(f'spell_id : {spell_id}')
-
-        if spell_id == 0:
-            pass
-        elif spell_id == 3:
-            self.img = pygame.image.load(f'{self.img_list[spell_id]}3.png')
-        else:
-            self.img = pygame.image.load(f'{self.img_list[spell_id]}.png')
+        try:
+            if spell_id == 0:
+                pass
+            elif spell_id == 3:
+                self.img = pygame.image.load(f'{self.img_list[spell_id]}3.png')
+            else:
+                self.img = pygame.image.load(f'{self.img_list[spell_id]}.png')
+        except FileNotFoundError:
+            print(f'LOG: Global_Magic/Global_Magic: Grafic for : Global_Magic with ID: {spell_id} not found ')
         self.width, self.height = self.img.get_size()
 
         self.cd = cd

@@ -9,8 +9,18 @@ class Button:
         self.clock = 0
         self.x_cord = x_cord
         self.y_cord = y_cord
-        self.button_image = pygame.image.load(f"{file_name}.png")
-        self.button_image_on = pygame.image.load(f"{file_name}_covered.png")
+        try:
+            self.button_image = pygame.image.load(f"{file_name}.png")
+            self.button_image_on = pygame.image.load(f"{file_name}_covered.png")
+        except FileNotFoundError:
+            name = file_name.replace('.png', '')
+            if not name == file_name:
+                print(f'LOG: menu/Button -> file_name: Replaced ( {file_name} ) with ( {name} )')
+                self.button_image = pygame.image.load(f"{name}.png")
+                self.button_image_on = pygame.image.load(f"{name}_covered.png")
+            else:
+                print(f'LOG: menu/Button -> file_name: Name not found_ ( {file_name} )')
+
         self.hitbox = pygame.Rect(self.x_cord, self.y_cord, self.button_image.get_width(), self.button_image.get_height())
 
     def tick(self, delta):
@@ -33,9 +43,25 @@ class Button_Blocked:
         self.fx = FX()
         self.x_cord = x_cord
         self.y_cord = y_cord
-        self.blocked_img = pygame.image.load(f"{blocked_file_name}.png")
-        self.button_image = pygame.image.load(f"{file_name}.png")
-        self.button_image_on = pygame.image.load(f"{file_name}_covered.png")
+        try:
+            self.blocked_img = pygame.image.load(f"{blocked_file_name}.png")
+            self.button_image = pygame.image.load(f"{file_name}.png")
+            self.button_image_on = pygame.image.load(f"{file_name}_covered.png")
+        except FileNotFoundError:
+            name1 = file_name.replace('.png', '')
+            name2 = blocked_file_name.replace('.png', '')
+            if not name1 == file_name:
+                print(f'LOG: menu/Button_Blocked -> file_name: Replaced ( {file_name} ) with ( {name1} )')
+                self.button_image = pygame.image.load(f"{name1}.png")
+                self.button_image_on = pygame.image.load(f"{name1}_covered.png")
+            else:
+                print(f'LOG: menu/Button_Blocked -> file_name: Name not found( {blocked_file_name} )')
+            if not name2 == blocked_file_name:
+                print(f'LOG: menu/Button_Blocked -> file_name: Replaced ( {blocked_file_name} ) with ( {name2} )')
+                self.button_image = pygame.image.load(f"{name2}.png")
+                self.button_image_on = pygame.image.load(f"{name2}_covered.png")
+            else:
+                print(f'LOG: menu/Button_Blocked -> file_name: Name not found ( {file_name} )')
         self.hitbox = pygame.Rect(self.x_cord, self.y_cord, self.button_image.get_width(), self.button_image.get_height())
         self.blocked = False
 
@@ -58,6 +84,7 @@ class Button_Blocked:
 
 class Checker_once:
     def __init__(self, x_cord, y_cord, state=False):
+        img = 'graph/menu/checkbox_false.png'
         self.x_cord = x_cord
         self.y_cord = y_cord
         self.field_image_false = pygame.image.load("graph/menu/checkbox_false.png")

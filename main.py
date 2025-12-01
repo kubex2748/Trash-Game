@@ -18,6 +18,8 @@ pygame.display.set_caption('TrashGame')
 class Start_Menu:
     def __init__(self):
         self.fx = FX()
+        self.lvl_BONUS_button = Button(1050, 760, "graph/menu/lvl_bonus_icon.png")
+
 
         self.arial_24 = pygame.font.SysFont("arial", 24)
         self.arial_16 = pygame.font.SysFont("arial", 16)
