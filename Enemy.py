@@ -546,6 +546,51 @@ class Zeus(Boss):
         for bullet in self.bullets:
             bullet.draw(window)
 
+####################################################################################################################
+# Hell
+
+class Fire_Bug(Enemy):
+    def __init__(self, hp, cd, dmg, max_speed):
+        self.image = 'graph/enemy/lvl3/floor_bug/floor_bug'
+        self.stand_img = pygame.image.load(f'{self.image}.png')  # normalna grafika
+        self.walk_img = [pygame.image.load(f'graph/enemy/lvl3/floor_bug/floor_bug_{x}.png') for x in range(1, 5)]  # animacja chodzenia
+        self.stand_angry_img = [pygame.image.load(f'graph/enemy/lvl3/floor_bug/floor_bug_angry_{x}.png') for x in range(1, 6)]
+        self.shot_img = [pygame.image.load(f'graph/enemy/lvl3/floor_bug/shot/floor_bug_shot_{x}.png') for x in range(1, 6)]
+
+        self.walk_index = 0
+        self.direction = 0
+        x = randint(100, 1800)
+        self.max_speed = randint(1, max_speed)
+        Enemy.__init__(self, x, 700, hp, cd, dmg, 0.6, self.max_speed, self.image)
+
+    def tick(self, walls, player, delta):
+        self.physic_tick(walls)
+        self.health_tick(delta)
+        self.tick_mele(delta)
+        self.attack_mele(player)
+        self.fx.zombie_sound(delta)
+
+        if self.hor_velocity > 0:
+            self.direction = 1
+        elif self.hor_velocity < 0:
+            self.direction = 0
+
+        if not self.hitbox.colliderect(player.hitbox):
+            if self.x_cord + self.distance > player.x_cord:
+                self.go_left()
+            elif self.x_cord + self.distance < player.x_cord:
+                self.go_right()
+
+    def draw(self, window):
+        self.draw_hp(window, self.x_cord, self.y_cord - 15, self.width, 8)
+        if self.hor_velocity != 0:
+            window.blit(self.walk_img[floor(self.walk_index)], (self.x_cord, self.y_cord))
+            self.walk_index += 0.4
+            if self.walk_index > 4:
+                self.walk_index = 0
+        else:
+            if self.direction == 1:
+                window.blit(self.stand_img, (self.x_cord, self.y_cord))
 
 ####################################################################################################################
 # Plants
