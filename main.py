@@ -33,7 +33,7 @@ class Start_Menu:
         self.clock = 0
         self.bg = pygame.image.load("graph/menu/start_menu.png")
 
-        self.ADMIN = True
+
         self.NICKNAME = ''
         self.MAX_SCORE = 0
         self.LEVEL = 0          #admin = 0
@@ -54,7 +54,7 @@ class Start_Menu:
         # submit_button = Button(270, 450, "graph/menu/buttons/button_SUBMIT")
         self.data_manag = Save_Manager('G:\python_worksapce\Platform_Game\data\data.json')
         self.nick_input = Text_Input(270, 350, 150, 40, 20, 'nickname', True, 270, 450)
-        # pass_input = Text_Input(270, 400, 150, 40, 20, 'password')
+        pass_input = Text_Input(270, 400, 150, 40, 20, 'password')
         # max_score = pygame.font.Font.render(self.arial_24, f'', True, (0, 0, 0))
         # current_level = pygame.font.Font.render(self.arial_24, '', True, (0, 0, 0))
 
@@ -101,7 +101,7 @@ class Start_Menu:
         self.lvl7_info_bot = pygame.font.Font.render(self.arial_16, "LVL 7", True, (0, 0, 0))
 
         self.lvl_B_activ = False
-        self.lvl_BONUS_button = Button(1050, 760, "graph/menu/lvl_bonus_icon")
+        self.lvl_BONUS_button = Button_Blocked(1050, 760, "graph/menu/lvl_bonus_icon", 'graph/menu/lvl_blocked_icon')
         self.lvl_BONUS_info_top = pygame.font.Font.render(self.arial_16, "Glitch World", True, (0, 0, 0))
         self.lvl_BONUS_info_bot = pygame.font.Font.render(self.arial_16, "BONUS", True, (0, 0, 0))
 
@@ -187,6 +187,9 @@ class Start_Menu:
             '''-----LOGIN-----'''
             self.NICKNAME = self.nick_input.tick(self.clock, events, delta)
             if self.NICKNAME != '':
+                if self.NICKNAME == 'admin':
+                    passw = self.pass_input.tick(self.clock, events, delta)
+                    self.pass_input.draw(window)
                 print(self.NICKNAME)
                 if not self.data_manag.get_player(self.NICKNAME):
                     self.data_manag.add_player(self.NICKNAME, '')
@@ -200,27 +203,18 @@ class Start_Menu:
 
             self.nick_input.draw(window)
 
-            if self.LOGED:
-                self.max_score = pygame.font.Font.render(self.arial_24, f'MAX SCORE:  {MAX_SCORE}', True, (0, 0, 0))
-                self.current_lvl = pygame.font.Font.render(self.arial_24, f'LEVEL:  {self.LEVEL}', True, (0, 0, 0))
-            else:
-                self.max_score = pygame.font.Font.render(self.arial_24, '', True, (0, 0, 0))
-                self.current_lvl = pygame.font.Font.render(self.arial_24, '', True, (0, 0, 0))
-
-            window.blit(self.max_score, (600, 350))
-            window.blit(self.current_lvl, (600, 450))
-
             '''-----CHAR_CHOOSE-----'''
             char_labels_iter = 350
             for ch in range(0, 5):
                 if self.char_list[ch].tick(delta):
-                    pass
+                    if ch == 0:
+                        pass
                 self.char_list[ch].draw(window)
                 window.blit(self.char_labels[ch], (455, char_labels_iter))
                 char_labels_iter += 23
 
             '''-----PLAYER_STATS-----'''
-            window.blit(self.player_img, (650, 370))
+            window.blit(self.player_img, (630, 370))
             window.blit(pygame.font.Font.render(self.arial_16, f'COINS: {self.COINS}', True, (0, 0, 0)), (750, 320))
             for ch in range(0, 5):
                 self.player_stats_labels[ch] = pygame.font.Font.render(self.arial_16, f'{self.stats.player[self.LEVEL][ch + 2] + self.stats.player_stats_bonus[ch]}', True, (0, 0, 0))
@@ -280,6 +274,9 @@ class Start_Menu:
                 self.lvl_6_activ = True
             if self.LEVEL >= 7 or self.LEVEL == 0:
                 self.lvl_7_activ = True
+
+            if self.LEVEL == 0:
+                self.lvl_B_activ = True
 
             if self.lvl1_button.tick():
                 if self.choose_wand_iter <= self.LEVEL or self.LEVEL == 0:
@@ -350,7 +347,7 @@ class Start_Menu:
 
 #############################################################################################
 
-            if self.lvl_BONUS_button.tick(delta):
+            if self.lvl_BONUS_button.tick(not self.lvl_B_activ):
                 lvl = LVL_BONUS(self.wand_id, self.FX_active, [0, 1, 2])
                 lvl.pause = False
                 lvl.run = True
