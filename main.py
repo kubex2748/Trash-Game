@@ -46,8 +46,6 @@ class Start_Menu:
         '''
             With Admin Mode can you easily Create your own Map 4b756261
         '''
-        self.editor_menu_active = False
-        self.map_edit_butt = Button(1400, 800, "graph/menu/buttons/button_EDITOR")
         self.editor = Editor()
 
         '''-----LOGIN-----'''
@@ -100,6 +98,18 @@ class Start_Menu:
         self.lvl7_button = pygame.image.load('graph/menu/lvl_blocked_icon.png')
         self.lvl7_info_top = pygame.font.Font.render(self.arial_16, "---", True, (0, 0, 0))
         self.lvl7_info_bot = pygame.font.Font.render(self.arial_16, "LVL 7", True, (0, 0, 0))
+
+##############################################################################################################################
+
+        self.m_editor_activ = False
+        self.m_editor_button = Button_Blocked(750, 760, "graph/menu/map_editor_icon", 'graph/menu/lvl_blocked_icon')
+        self.m_info_top = pygame.font.Font.render(self.arial_16, "MAP EDITOR", True, (0, 0, 0))
+        self.m_info_bot = pygame.font.Font.render(self.arial_16, "", True, (0, 0, 0))
+
+        self.A_activ = False
+        self.A_button = Button_Blocked(900, 760, "graph/menu/admin_room_icon", 'graph/menu/lvl_blocked_icon')
+        self.A_info_top = pygame.font.Font.render(self.arial_16, "???", True, (0, 0, 0))
+        self.A_info_bot = pygame.font.Font.render(self.arial_16, "", True, (0, 0, 0))
 
         self.lvl_B_activ = False
         self.lvl_BONUS_button = Button_Blocked(1050, 760, "graph/menu/lvl_bonus_icon", 'graph/menu/lvl_blocked_icon')
@@ -185,6 +195,10 @@ class Start_Menu:
 
             window.blit(self.bg, (0, 0))
 
+            if self.exit_button.tick(delta):
+                self.run = False
+            self.exit_button.draw(window)
+
             '''-----LOGIN-----'''
             self.NICKNAME = self.nick_input.tick(self.clock, events, delta)
             if self.NICKNAME != '':
@@ -248,23 +262,6 @@ class Start_Menu:
                         self.stats.player_stats_bonus[4] += 0.2
                     self.upgrade_buttons[u].draw(window)
 
-            '''-----MAP EDITOR-----'''
-            if self.editor_menu_active:
-                pause_image = pygame.image.load("graph/menu/editor_menu.png")
-                START_button = Button(950, 300, "graph/menu/buttons/button_START")
-                EXTI_button = Button(950, 700, "graph/menu/buttons/button_EXIT")
-
-                if START_button.tick(delta) and not self.editor.run:
-                    self.editor.run = True
-                    self.editor.start()
-                if EXTI_button.tick(delta):
-                    self.editor_menu_active = not self.editor_menu_active
-
-                window.blit(pause_image, (800, 200))
-                START_button.draw(window)
-                EXTI_button.draw(window)
-                pygame.display.update()
-                continue
 
 #############################################################################################
             '''-----LVL-----'''
@@ -283,6 +280,8 @@ class Start_Menu:
 
             if self.LEVEL == 0:
                 self.lvl_B_activ = True
+                self.A_activ = True
+                self.m_editor_activ = True
 
             if self.lvl1_button.tick():
                 if self.choose_wand_iter <= self.LEVEL or self.LEVEL == 0:
@@ -352,6 +351,18 @@ class Start_Menu:
             window.blit(self.lvl7_button, (300, 760))
 
 #############################################################################################
+            if self.m_editor_button.tick(not self.m_editor_activ):
+                self.editor.run = True
+                self.editor.start()
+            self.m_editor_button.draw(window)
+            #window.blit(self.lvl2_info_top, (453, 575))
+            #window.blit(self.lvl2_info_bot, (483, 705))
+
+            if self.A_button.tick(not self.A_activ):
+                pass
+            self.A_button.draw(window)
+            #window.blit(self.lvl1_info_top, (295, 575))
+            #window.blit(self.lvl1_info_bot, (335, 705))
 
             if self.lvl_BONUS_button.tick(not self.lvl_B_activ):
                 lvl = LVL_BONUS(self.wand_id, self.FX_active, [0, 1, 2], self.LEVEL)
@@ -364,16 +375,6 @@ class Start_Menu:
 
 #############################################################################################
 
-            '''-----MAP_EDITOR-----'''
-            if self.LEVEL == 0:
-                if self.map_edit_butt.tick(delta):
-                    self.editor_menu_active = not self.editor_menu_active
-                self.map_edit_butt.draw(window)
-
-            '''-----EXIT-----'''
-            if self.exit_button.tick(delta):
-                self.run = False
-            self.exit_button.draw(window)
 
             '''-----OPTIONS-----'''
             self.checker_easy.tick(delta)

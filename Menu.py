@@ -16,18 +16,11 @@ class Button:
         self.y_cord = y_cord
 
         self.delay = 0.2
-
+        self.button_image = pygame.image.load(f"{file_name}.png")
         try:
-            self.button_image = pygame.image.load(f"{file_name}.png")
             self.button_image_on = pygame.image.load(f"{file_name}_covered.png")
         except FileNotFoundError:
-            name = file_name.replace('.png', '')
-            if not name == file_name:
-                print(f'LOG: menu/Button -> file_name: Replaced ( {file_name} ) with ( {name} )')
-                self.button_image = pygame.image.load(f"{name}.png")
-                self.button_image_on = pygame.image.load(f"{name}_covered.png")
-            else:
-                print(f'LOG: menu/Button -> file_name: Name not found_ ( {file_name} )')
+            self.button_image_on = pygame.image.load(f"{file_name}.png")
 
         self.hitbox = pygame.Rect(self.x_cord, self.y_cord, self.button_image.get_width(), self.button_image.get_height())
 

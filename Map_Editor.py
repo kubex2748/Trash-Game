@@ -16,6 +16,15 @@ class Editor:
         self.COLOR_button = Button(250, 980, "graph/menu/buttons/button_COLOR")
         self.PRINT_button = Button(400, 980, "graph/menu/buttons/button_PRINT")
 
+        self.walls_icon = Button(700, 980, "graph/menu/editor_walls_icon")
+        self.walls_icon.delay = 0.5
+        self.ground_icon = Button(770, 980, "graph/menu/editor_ground_icon")
+        self.ground_icon.delay = 0.5
+        self.turret_icon = Button(840, 980, "graph/menu/editor_turets_icon")
+        self.turret_icon.delay = 0.5
+
+        self.mod = 0
+
         self.path = img
         self.image = pygame.image.load('graph/spels/none_icon.png')
         self.run = False
@@ -93,33 +102,38 @@ class Editor:
             add_value_pointer = pygame.font.Font.render(pygame.font.SysFont("arial", 16), f"value: {self.add_value}", True, (45, 227, 48))
             self.x_mouse, self.y_mouse = pygame.mouse.get_pos()
 
-            if keys[pygame.K_w] and self.wall_start_y > 0:
-                self.wall_height += self.add_value
-                self.wall_start_y -= self.add_value
-            if keys[pygame.K_s] and self.wall_start_y < 930:
-                self.wall_height -= self.add_value
-                self.wall_start_y += self.add_value
-            if keys[pygame.K_d] and self.wall_start_x < 1920:
-                self.wall_width += self.add_value
-            if keys[pygame.K_a] and self.wall_start_x > 0:
-                self.wall_width -= self.add_value
+            '''----MODS----'''
+            # Create Walls
+            if self.mod == 1 or self.mod == 2:
+                if keys[pygame.K_w] and self.wall_start_y > 0:
+                    self.wall_height += self.add_value
+                    self.wall_start_y -= self.add_value
+                if keys[pygame.K_s] and self.wall_start_y < 930:
+                    self.wall_height -= self.add_value
+                    self.wall_start_y += self.add_value
+                if keys[pygame.K_d] and self.wall_start_x < 1920:
+                    self.wall_width += self.add_value
+                if keys[pygame.K_a] and self.wall_start_x > 0:
+                    self.wall_width -= self.add_value
 
-            if keys[pygame.K_UP]:
-                self.wall_start_y -= self.add_value
-            if keys[pygame.K_DOWN]:
-                self.wall_start_y += self.add_value
-            if keys[pygame.K_LEFT]:
-                self.wall_start_x -= self.add_value
-            if keys[pygame.K_RIGHT]:
-                self.wall_start_x += self.add_value
+                if keys[pygame.K_UP]:
+                    self.wall_start_y -= self.add_value
+                if keys[pygame.K_DOWN]:
+                    self.wall_start_y += self.add_value
+                if keys[pygame.K_LEFT]:
+                    self.wall_start_x -= self.add_value
+                if keys[pygame.K_RIGHT]:
+                    self.wall_start_x += self.add_value
 
-
-            self.wall = pygame.Rect(
-                self.wall_start_x,
-                self.wall_start_y,
-                self.wall_width,
-                self.wall_height
-            )
+                self.wall = pygame.Rect(
+                    self.wall_start_x,
+                    self.wall_start_y,
+                    self.wall_width,
+                    self.wall_height
+                )
+            # set
+            elif self.mod == 3:
+                pass
 
             events = pygame.event.get()
             for event in events:
@@ -127,25 +141,25 @@ class Editor:
                     self.run = False
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     self.editor_menu_active = not self.editor_menu_active
-
-                if not self.editor_menu_active and self.y_mouse < 930:
-                    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                        self.x_start = self.x_mouse
-                        self.y_start = self.y_mouse
-                        self.draw_prototyp = False
-                    if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-                        if self.ignore_first_up:
-                            self.ignore_first_up = False
-                            continue  # pomiń pierwszy UP po starcie
-                        self.x_stop = self.x_mouse
-                        self.y_stop = self.y_mouse
-                        self.draw_prototyp = True
-                        self.set_wall_pos()
-                if event.type == pygame.MOUSEBUTTONDOWN and self.draw_prototyp:
-                    if event.button == 4 and self.add_value < 200:  # scroll up
-                        self.add_value += 1
-                    elif event.button == 5 and self.add_value > 1:  # scroll down
-                        self.add_value -= 1
+                if self.mod == 1 or self.mod == 2:
+                    if not self.editor_menu_active and self.y_mouse < 930:
+                        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                            self.x_start = self.x_mouse
+                            self.y_start = self.y_mouse
+                            self.draw_prototyp = False
+                        if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+                            if self.ignore_first_up:
+                                self.ignore_first_up = False
+                                continue  # pomiń pierwszy UP po starcie
+                            self.x_stop = self.x_mouse
+                            self.y_stop = self.y_mouse
+                            self.draw_prototyp = True
+                            self.set_wall_pos()
+                    if event.type == pygame.MOUSEBUTTONDOWN and self.draw_prototyp:
+                        if event.button == 4 and self.add_value < 200:  # scroll up
+                            self.add_value += 1
+                        elif event.button == 5 and self.add_value > 1:  # scroll down
+                            self.add_value -= 1
 
             #self.scrol_bar.tick(events, pygame.mouse.get_pos())
             #self.scrol_bar.draw(window)
@@ -155,6 +169,18 @@ class Editor:
 
             for wall in range(0, len(self.walls)):
                 pygame.draw.rect(window, (self.walls_colors[wall][0], self.walls_colors[wall][1], self.walls_colors[wall][2]), (self.walls[wall][0], self.walls[wall][1], self.walls[wall][2], self.walls[wall][3]))
+
+            '''----GUI----'''
+            if self.walls_icon.tick(delta):
+                self.mod = 1
+            elif self.ground_icon.tick(delta):
+                self.mod = 2
+            elif self.turret_icon.tick(delta):
+                self.mod = 3
+
+            self.walls_icon.draw(window)
+            self.ground_icon.draw(window)
+            self.turret_icon.draw(window)
 
             if self.ADD_button.tick(delta) and self.draw_prototyp:
                 self.draw_prototyp = False
@@ -180,8 +206,8 @@ class Editor:
                 self.print_tab()
             self.PRINT_button.draw(window)
 
-            self.arrows.tick(delta)
-            self.arrows.draw(window)
+            #self.arrows.tick(delta)
+            #self.arrows.draw(window)
 
             if self.y_mouse < 930 and not self.editor_menu_active:
                 window.blit(mouse_pos, (self.x_mouse + 20, self.y_mouse + 20))
@@ -220,5 +246,43 @@ class Editor:
             pygame.display.update()
 
 
+
+class Admin_Room:
+    def __init__(self):
+        self.image = pygame.image.load('graph/background/admin_room.png')
+        self.clock = 0
+
+        self.run = False
+        self.menu_active = False
+
+    def start(self):
+        while self.run:
+
+            window.blit(self.image, (0, 0))
+
+            events = pygame.event.get()
+            for event in events:
+                if event.type == pygame.QUIT:  # jeśli gracz zamknie okienko
+                    self.run = False
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    self.menu_active = not self.menu_active
+
+            delta = pygame.time.Clock().tick(120)  # maksymalnie 120 fps
+            self.clock += delta
+            keys = pygame.key.get_pressed()
+            self.x_mouse, self.y_mouse = pygame.mouse.get_pos()
+
+            if keys[pygame.K_w]:
+                pass
+
+            if self.menu_active:
+                pause_image = pygame.image.load("graph/menu/editor_menu.png")
+                EXTI_button = Button(950, 700, "graph/menu/buttons/button_EXIT")
+
+                if EXTI_button.tick(delta):
+                    self.run = False
+
+                window.blit(pause_image, (800, 200))
+                EXTI_button.draw(window)
 
 
