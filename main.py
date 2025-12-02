@@ -5,7 +5,7 @@ from DataManager import Save_Manager
 from Menu import Button, Button_Blocked, Checker_once, Choose_Continu, Info_area, Text_Input, Valume
 from Informations import Info_Game, Info_Spells, Links, Stats
 from Levels import LVL1, LVL2, LVL_BONUS
-from Map_Editor import Editor
+from Map_Editor import Editor, Admin_Room
 from Sound_Controller import FX
 
 pygame.init()
@@ -47,6 +47,7 @@ class Start_Menu:
             With Admin Mode can you easily Create your own Map 4b756261
         '''
         self.editor = Editor()
+        self.A_room = Admin_Room()
 
         '''-----LOGIN-----'''
         # submit_button = Button(270, 450, "graph/menu/buttons/button_SUBMIT")
@@ -359,7 +360,8 @@ class Start_Menu:
             #window.blit(self.lvl2_info_bot, (483, 705))
 
             if self.A_button.tick(not self.A_activ):
-                pass
+                self.A_room.run = True
+                self.A_room.start()
             self.A_button.draw(window)
             #window.blit(self.lvl1_info_top, (295, 575))
             #window.blit(self.lvl1_info_bot, (335, 705))

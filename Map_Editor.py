@@ -256,7 +256,6 @@ class Editor:
                 if EXTI_button.tick(delta):
                     self.run = False
 
-
                 window.blit(pause_image, (800, 200))
                 START_button.draw(window)
                 IMPORT_button.draw(window)
@@ -265,7 +264,6 @@ class Editor:
                 continue
 
             pygame.display.update()
-
 
 
 class Admin_Room:
@@ -278,9 +276,9 @@ class Admin_Room:
 
     def start(self):
         while self.run:
-
             window.blit(self.image, (0, 0))
-
+            delta = pygame.time.Clock().tick(120)  # maksymalnie 120 fps
+            self.clock += delta
             events = pygame.event.get()
             for event in events:
                 if event.type == pygame.QUIT:  # jeśli gracz zamknie okienko
@@ -288,22 +286,22 @@ class Admin_Room:
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     self.menu_active = not self.menu_active
 
-            delta = pygame.time.Clock().tick(120)  # maksymalnie 120 fps
-            self.clock += delta
+
+            '''----CONTROL----'''
+
             keys = pygame.key.get_pressed()
             self.x_mouse, self.y_mouse = pygame.mouse.get_pos()
 
             if keys[pygame.K_w]:
                 pass
-
+            '''----MENU----'''
             if self.menu_active:
                 pause_image = pygame.image.load("graph/menu/editor_menu.png")
                 EXTI_button = Button(950, 700, "graph/menu/buttons/button_EXIT")
-
                 if EXTI_button.tick(delta):
                     self.run = False
-
                 window.blit(pause_image, (800, 200))
                 EXTI_button.draw(window)
 
+            pygame.display.update()
 
