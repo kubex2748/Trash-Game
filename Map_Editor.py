@@ -22,6 +22,7 @@ class Editor:
         self.ground_icon.delay = 0.5
         self.turret_icon = Button(840, 980, "graph/menu/editor_turets_icon")
         self.turret_icon.delay = 0.5
+        self.turret_img = pygame.image.load('graph/menu/editor_turets_icon.png')
 
         self.mod = 0
 
@@ -41,6 +42,9 @@ class Editor:
             [0, 0, 1920, 1],    # roof
             [0, 0, 1, 930],     # left wall
             [1920, 0, 1, 930],   # right wall
+        ]
+        self.turrets = [
+            [0, 0],
         ]
 
         self.arrows = Choose_Continu(600, 980, 550, 980, self.walls)
@@ -68,9 +72,16 @@ class Editor:
         for w in range(0, len(self.walls)):
             print(f'[{self.walls[w][0]}, {self.walls[w][1]}, {self.walls[w][2]}, {self.walls[w][3]}, {self.walls_colors[w][0]}, {self.walls_colors[w][1]}, {self.walls_colors[w][2]}]')
 
-    def add_wall(self, x, y, w, h):
-        self.walls.append([x, y, w, h])
+    def add_wall(self, x, y, w, h, f=False):
+        if f:
+            self.walls.append([x, y, w, h, f])
+        else:
+            self.walls.append([x, y, w, h])
         self.walls_colors.append([self.R, self.G, self.B])
+        self.mod = 0
+
+    def add_turet(self, x, y):
+        self.turrets.append([x, y],)
 
     def set_wall_pos(self):
         if self.x_start < self.x_stop:
@@ -131,7 +142,7 @@ class Editor:
                     self.wall_width,
                     self.wall_height
                 )
-            # set
+            # set turets pos
             elif self.mod == 3:
                 pass
 
@@ -160,6 +171,11 @@ class Editor:
                             self.add_value += 1
                         elif event.button == 5 and self.add_value > 1:  # scroll down
                             self.add_value -= 1
+                elif self.mod == 3:
+                    if not self.editor_menu_active and self.y_mouse < 930:
+                        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                            self.add_turet(self.x_mouse, self.y_mouse)
+
 
             #self.scrol_bar.tick(events, pygame.mouse.get_pos())
             #self.scrol_bar.draw(window)
@@ -169,6 +185,8 @@ class Editor:
 
             for wall in range(0, len(self.walls)):
                 pygame.draw.rect(window, (self.walls_colors[wall][0], self.walls_colors[wall][1], self.walls_colors[wall][2]), (self.walls[wall][0], self.walls[wall][1], self.walls[wall][2], self.walls[wall][3]))
+            for turrets in range(0, len(self.turrets)):
+                window.blit(self.turret_img, (self.turrets[turrets][0], self.turrets[turrets][1]))
 
             '''----GUI----'''
             if self.walls_icon.tick(delta):
@@ -184,7 +202,10 @@ class Editor:
 
             if self.ADD_button.tick(delta) and self.draw_prototyp:
                 self.draw_prototyp = False
-                self.add_wall(self.wall_start_x, self.wall_start_y, self.wall_width, self.wall_height)
+                if self.mod == 1:
+                    self.add_wall(self.wall_start_x, self.wall_start_y, self.wall_width, self.wall_height, True)
+                else:
+                    self.add_wall(self.wall_start_x, self.wall_start_y, self.wall_width, self.wall_height)
                 self.wall_start_x = 0
                 self.wall_start_y = 0
                 self.wall_width = 0
