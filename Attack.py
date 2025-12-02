@@ -7,7 +7,18 @@ from GUI import GUI
 from Informations import Links
 
 
+'''
+    Some stilled code with my changes
+    - Magic     -> Bullets
+    - Weapon    -> Wand
+    
+    - depend on wand_id     -> if u want add a new wand i will try give u tips in all classes but it will be pretty difficult 
+'''
 
+'''
+    Bullets...
+        - for new wand u dont need look here
+'''
 class Magic(Physic):
     def __init__(self, magic, speed, damage, x_side, y_side, image):
         self.spell_img = pygame.image.load(f"{image}.png")
@@ -49,6 +60,10 @@ class Magic(Physic):
         window.blit(self.spell_img, (self.x_cord, self.y_cord))
 
 
+'''
+    some Trigometrie 
+'''
+
 def degree(x_screen, y_screen, x_mouse, y_mouse):
     x_side = x_screen - x_mouse
     y_side = y_screen - y_mouse
@@ -65,6 +80,14 @@ def centered_rotate(image, x, y, angle):
     return rotated_image, new_rect
 
 
+'''
+    here we are new waepon is near u need just:
+        - links.global_set_icon
+        - links.wand_animations
+        - fx.wand_shot_sound
+        - links.spells
+        
+'''
 class Weapon:
     def __init__(self, win, speed, damage, cooldown, wand_id=0):
         self.fx = FX()
@@ -86,7 +109,6 @@ class Weapon:
 
 
 
-
     def shoot(self, boost):
         if self.clock > self.cd:
             self.fx.wand_shot_sound(self.wand_id, 0.6)
@@ -96,7 +118,9 @@ class Weapon:
             y_side = y_mouse - self.y_cord
             self.bullets.append(Magic(self, self.speed, self.damage * boost, x_side, y_side, self.spells[self.wand_id]))
 
-    # experimental
+    '''
+        here we have experimentales upgrade, maybe i add it somewhen
+    '''
     def shoot_shotgun(self):
         shots_y = [0, 0, 0]
         if self.clock > self.cd:

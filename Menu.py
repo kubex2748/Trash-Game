@@ -3,12 +3,20 @@ import pygame
 from Sound_Controller import FX
 
 
+''' 
+    Just a button: 
+        - if hitbox.collidepoint(get_pos()) -> draw '{name}_covered.png'
+        - if pressed                        -> tick = True
+'''
 class Button:
     def __init__(self, x_cord, y_cord, file_name):
         self.fx = FX()
         self.clock = 0
         self.x_cord = x_cord
         self.y_cord = y_cord
+
+        self.delay = 0.2
+
         try:
             self.button_image = pygame.image.load(f"{file_name}.png")
             self.button_image_on = pygame.image.load(f"{file_name}_covered.png")
@@ -26,7 +34,7 @@ class Button:
     def tick(self, delta):
         self.clock += delta
         if self.hitbox.collidepoint(pygame.mouse.get_pos()):
-           if pygame.mouse.get_pressed()[0] and self.clock > 0.2:
+           if pygame.mouse.get_pressed()[0] and self.clock > self.delay:
                self.clock = 0.0
                self.fx.accept_sound(0.4)
                return True
@@ -38,6 +46,11 @@ class Button:
             window.blit(self.button_image, (self.x_cord, self.y_cord))
 
 
+'''
+    Just a button with block:
+         - if tick(False)                   -> draw file_name
+         - else                             -> blocked_file_name
+'''
 class Button_Blocked:
     def __init__(self, x_cord, y_cord, file_name, blocked_file_name):
         self.fx = FX()
@@ -82,9 +95,12 @@ class Button_Blocked:
             window.blit(self.blocked_img, (self.x_cord, self.y_cord))
 
 
+'''
+    For check list or options, example: musik = False 
+        - if state = True                    -> tick = True
+'''
 class Checker_once:
     def __init__(self, x_cord, y_cord, state=False):
-        img = 'graph/menu/checkbox_false.png'
         self.x_cord = x_cord
         self.y_cord = y_cord
         self.field_image_false = pygame.image.load("graph/menu/checkbox_false.png")
@@ -113,6 +129,10 @@ class Checker_once:
         window.blit(text_field, (self.x_cord + 40, self.y_cord + 7))
 
 
+'''
+    someday i'll write it but now it doesn't work
+    it's checker but if u draw it more time in colum, u can keep state in just one True 
+'''
 class Checker_multi:
     def __init__(self, x_cord, y_cord, dis, nr):
         self.x_cord = x_cord
@@ -143,6 +163,10 @@ class Checker_multi:
             check.draw(win)
 
 
+'''
+    The arrow u can see it for example with wand choose in menu
+        - u give the cords, list which one u want iter and if u don't want start with 1st pos, give other pos
+'''
 class Choose_Continu():
     def __init__(self, x_cord_R, y_cord_R, x_cord_L, y_cord_L, list, start=0):
         self.button_R = Button(x_cord_R, y_cord_R, 'graph/menu/arrow_right')
@@ -175,6 +199,13 @@ class Choose_Continu():
         self.button_L.draw(window)
 
 
+'''
+    !!! Stealed Code !!! it work but not perfect 
+        - len=-1                                -> Infinity 
+        - placeholder                           -> pass, login etc
+        - submit_butt = True                    -> draw and tick submit_butt
+        - it ENTER or submit_butt               -> tick = text
+'''
 class Text_Input:
     def __init__(self, x, y, width, height, len=-1, placeholder="", submit_butt=False, submit_butt_x=0, submit_butt_y=0):
         self.x_cord = x
@@ -235,6 +266,11 @@ class Text_Input:
             pygame.draw.rect(window, (0, 0, 0), self.cursor)
 
 
+'''
+    It good tool for all info boxes
+        - fist 4 parameter are just hitbox 
+        - there are reigt now only too sizes
+'''
 class Info_area:
     def __init__(self, x, y, width, height, big_box=False):
         self.text = []
@@ -275,6 +311,9 @@ class Info_area:
                 pass
 
 
+'''
+    Someday it will be Volume 
+'''
 class Valume:
     def __init__(self, x, y, max=100, start=0):
         self.x = x

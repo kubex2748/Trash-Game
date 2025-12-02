@@ -6,6 +6,9 @@ from tkinter import filedialog, colorchooser
 window = pygame.display.set_mode((1920, 1080))
 pygame.init()
 
+'''
+    Yes u can just copy it and Interpreting but it is loser way to use it, search for password is not that hard
+'''
 
 class Editor:
     def __init__(self, img=''):

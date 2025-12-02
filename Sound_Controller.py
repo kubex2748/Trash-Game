@@ -49,19 +49,27 @@ class FX:
             sound.set_volume(volume)
             sound.play()
 
-    def global_spel_sounds(self, id):
-        if id > 0:
-            sound = pygame.mixer.Sound(f'{self.sounds.FX_global_spells[id]}.wav')
-            sound.set_volume(0.5)
-            sound.play()
-
     def open_wave_sound(self):
         if self.activ:
             sound = pygame.mixer.Sound('sound/FX/things/open_drums.wav')
             sound.set_volume(1)
             sound.play()
 
-    #########################################################################################################################################################
+#########################################################################################################################################################
+
+    '''
+        id = wand_id
+    '''
+
+    def global_spel_sounds(self, id):
+        if id > 0:
+            sound = pygame.mixer.Sound(f'{self.sounds.FX_global_spells[id]}.wav')
+            sound.set_volume(0.5)
+            sound.play()
+
+
+#########################################################################################################################################################
+
 
     def zombie_sound(self, delta):
         if self.activ:

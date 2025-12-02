@@ -52,9 +52,10 @@ class Start_Menu:
 
         '''-----LOGIN-----'''
         # submit_button = Button(270, 450, "graph/menu/buttons/button_SUBMIT")
+        self.pre_admin_state = False                                                                # if u try to log as admin -> True
         self.data_manag = Save_Manager('G:\python_worksapce\Platform_Game\data\data.json')
         self.nick_input = Text_Input(270, 350, 150, 40, 20, 'nickname', True, 270, 450)
-        pass_input = Text_Input(270, 400, 150, 40, 20, 'password')
+        self.pass_input = Text_Input(270, 400, 150, 40, 20, 'password')
         # max_score = pygame.font.Font.render(self.arial_24, f'', True, (0, 0, 0))
         # current_level = pygame.font.Font.render(self.arial_24, '', True, (0, 0, 0))
 
@@ -188,8 +189,7 @@ class Start_Menu:
             self.NICKNAME = self.nick_input.tick(self.clock, events, delta)
             if self.NICKNAME != '':
                 if self.NICKNAME == 'admin':
-                    passw = self.pass_input.tick(self.clock, events, delta)
-                    self.pass_input.draw(window)
+                    self.pre_admin_state = True
                 print(self.NICKNAME)
                 if not self.data_manag.get_player(self.NICKNAME):
                     self.data_manag.add_player(self.NICKNAME, '')
@@ -200,10 +200,16 @@ class Start_Menu:
                         self.LEVEL = data_manag.get_value(NICKNAME, "level")
                         print(f'score: {self.MAX_SCORE}')
                         print(f'level: {self.LEVEL}')
-
             self.nick_input.draw(window)
 
+            if self.pre_admin_state:
+                passw = self.pass_input.tick(self.clock, events, delta)
+                self.pass_input.draw(window)
+
             '''-----CHAR_CHOOSE-----'''
+            '''
+                You can create 4 saves and then chose one of 5.
+            '''
             char_labels_iter = 350
             for ch in range(0, 5):
                 if self.char_list[ch].tick(delta):
@@ -348,7 +354,7 @@ class Start_Menu:
 #############################################################################################
 
             if self.lvl_BONUS_button.tick(not self.lvl_B_activ):
-                lvl = LVL_BONUS(self.wand_id, self.FX_active, [0, 1, 2])
+                lvl = LVL_BONUS(self.wand_id, self.FX_active, [0, 1, 2], self.LEVEL)
                 lvl.pause = False
                 lvl.run = True
                 lvl.start()
