@@ -4,7 +4,7 @@ import json
 from DataManager import Save_Manager
 from Menu import Button, Button_Blocked, Checker_once, Choose_Continu, Info_area, Text_Input, Valume
 from Informations import Info_Game, Info_Spells, Links, Stats
-from Levels import LVL1, LVL2, LVL_BONUS
+from Levels import LVL1, LVL2, LVL3, LVL_BONUS
 from Map_Editor import Editor, Admin_Room
 from Sound_Controller import FX
 
@@ -314,8 +314,13 @@ class Start_Menu:
             window.blit(self.lvl2_info_bot, (483, 705))
 
             if self.lvl3_button.tick(not self.lvl_3_activ):
-                if self.choose_wand_iter + 1 <= self.LEVEL:
-                    pass
+                if self.choose_wand_iter + 1 <= self.LEVEL or self.LEVEL == 0:
+                    lvl = LVL3(self.wand_id, self.FX_active, [0, 1, 2], self.LEVEL)
+                    lvl.pause = False
+                    lvl.run = True
+                    lvl.start()
+                    if self.LEVEL == 3 and lvl.get_win():
+                        self.LEVEL += 1
                 else:
                     self.fx.error_sound(0.3)
             self.lvl3_button.draw(window)

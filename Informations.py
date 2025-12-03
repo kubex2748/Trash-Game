@@ -207,13 +207,27 @@ class Stats:
 class Waves_Tab:
     def __init__(self, lvl):
         self.lvl_1_mobs_stats = [
-            [100, 0.5, 5, 4],
-            [50, 1.5, 10, 6],
-            [300, 1.5, 5, 2],
-            [400, 30, 1, 10],
-            [100, 2, 20, 5],
-            [100, 100, 300, 0.5, 40, 3]               #boss
+            # HP  CD  DMG walk
+            [100, 0.5, 5,  4],                          # Ghost
+            [50,  1.5, 10, 6],                          # Shooter
+            [300, 1.5, 5,  2],                          # Zombie
+            [400, 30,  1],                              # Turret
+            [100, 2,   20, 5],                          # Skeleton
+            [100, 100, 300, 0.5],                       # Lich
         ]
+
+        self.lvl_2_mobs_stats = [
+            # HP  CD  DMG  walk
+            [100, 0.5, 5,  4],                              # Soldier Ghost
+            [50,  1.5, 10, 6],                              # Soldier Tank
+            [300, 1.5, 5,  2],                              # Roman Shaman
+            [400, 30,  1,  10],                             # Zeus
+        ]
+
+        self.lvl_3_mobs_stats = [
+            [100, 0.5, 5, 4],                           # Bug
+        ]
+
 
         self.lvl_1 = [  # ghost, shooter, tank, turret, skeleton, lich
             [2, 0, 0, 0, 0, 0],
@@ -233,15 +247,43 @@ class Waves_Tab:
 
         ]
 
+        self.lvl_3 = [
+            [1],
+        ]
+
+        self.lvl_4 = [
+            [],
+        ]
+
+        self.lvl_5 = [
+            [],
+        ]
+
+        self.lvl_6 = [
+            [],
+        ]
+
         self.tab = []
+        self.mob_stats = []
         if lvl == 1:
             self.tab = self.lvl_1
+            self.mob_stats = self.mob_stats
         elif lvl == 2:
             self.tab = self.lvl_2
+            self.mob_stats = self.lvl_2_mobs_stats
+        elif lvl == 3:
+            self.tab = self.lvl_3
+            self.mob_stats = self.lvl_3_mobs_stats
+        elif lvl == 4:
+            self.tab = self.lvl_4
+        elif lvl == 5:
+            self.tab = self.lvl_5
+        elif lvl == 6:
+            self.tab = self.lvl_6
 
 
 class Walls_Position:
-    def __init__(self):
+    def __init__(self, lvl):
         self.lvl1 = [
             [0, 0, 1920, 1, 0, 0, 0, True],
             [0, 0, 1, 930, 0, 0, 0, True],
@@ -255,6 +297,55 @@ class Walls_Position:
             [1016, 503, 125, 7, 80, 68, 56, False],
             [892, 350, 70, 11, 80, 68, 56, False],
         ]
+
+        self.lvl2 = [
+            [0, 0, 1920, 1, 0, 0, 0, True],
+            [0, 0, 1, 930, 0, 0, 0, True],
+            [1920, 0, 1, 930, 0, 0, 0, True],
+            [0, 890, 1920, 40, 0, 0, 0, True],
+        ]
+
+        self.lvl3 = [
+            [0, 0, 1920, 1, 0, 0, 0, True],
+            [0, 0, 1, 930, 0, 0, 0, True],
+            [1920, 0, 1, 930, 0, 0, 0, True],
+            [0, 890, 1920, 40, 0, 0, 0, True],
+        ]
+
+        self.lvl4 = [
+            [0, 0, 1920, 1, 0, 0, 0, True],
+            [0, 0, 1, 930, 0, 0, 0, True],
+            [1920, 0, 1, 930, 0, 0, 0, True],
+            [0, 890, 1920, 40, 0, 0, 0, True],
+        ]
+
+        self.lvl5 = [
+            [0, 0, 1920, 1, 0, 0, 0, True],
+            [0, 0, 1, 930, 0, 0, 0, True],
+            [1920, 0, 1, 930, 0, 0, 0, True],
+            [0, 890, 1920, 40, 0, 0, 0, True],
+        ]
+
+        self.lvl6 = [
+            [0, 0, 1920, 1, 0, 0, 0, True],
+            [0, 0, 1, 930, 0, 0, 0, True],
+            [1920, 0, 1, 930, 0, 0, 0, True],
+            [0, 890, 1920, 40, 0, 0, 0, True],
+        ]
+
+        self.tab = []
+        if lvl == 1:
+            self.tab = self.lvl1
+        elif lvl == 2:
+            self.tab = self.lvl2
+        elif lvl == 3:
+            self.tab = self.lvl3
+        elif lvl == 4:
+            self.tab = self.lvl4
+        elif lvl == 5:
+            self.tab = self.lvl5
+        elif lvl == 6:
+            self.tab = self.lvl6
 
 
 class Sounds:
