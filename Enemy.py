@@ -572,8 +572,6 @@ class Fire_Bug(Enemy):
         self.max_speed = randint(1, max_speed)
         Enemy.__init__(self, x, 700, hp, cd, dmg, 0.6, self.max_speed, self.image)
 
-
-
     def tick(self, walls, player, delta):
         self.clock_angry += delta
         self.clock += delta
@@ -631,6 +629,73 @@ class Fire_Bug(Enemy):
             if self.ult:
                 window.blit(self.shot_img[floor(self.index)], (self.x_cord + 30, self.y_cord - self.shot_img[0].get_height() + 20))
 
+
+class Fire_Bee(Enemy):
+    def __init__(self, hp, cd, dmg, max_speed):
+        self.fly_right_img = [pygame.image.load(f'graph/enemy/lvl3/bee/bee_{x}.png') for x in range(1, 4)]  # animacja chodzenia
+        self.fly_left_img = [pygame.transform.flip(pygame.image.load(f'graph/enemy/lvl3/bee/bee_{x}.png'), True, False) for x in range(1, 4)]
+        self.angry_right = pygame.image.load('graph/enemy/lvl3/bee/bee_angry.png')
+        self.angry_left = pygame.transform.flip(pygame.image.load('graph/enemy/lvl3/bee/bee_angry.png'), True, False)
+
+        x = randint(100, 1800)
+        y = randint(700, 750)
+
+        Enemy.__init__(self, x, y, hp, cd, dmg, 0.5, max_speed, 'graph/enemy/lvl3/bee/bee_1')
+        self.gravity = 0.15
+
+        self.move_side = 0
+        self.clock_move = 0
+        self.angry = False
+        self.direction = 0
+        self.index = 0
+
+        self.change_move_time = 5
+
+    def tick(self, walls, player, delta):
+        self.clock_move += delta
+        self.physic_tick(walls)
+        self.health_tick(delta)
+
+        if self.clock_move >= self.change_move_time:
+            self.move_side = randint(0, 3)
+
+        if self.hor_velocity > 0:
+            self.direction = 1
+        elif self.hor_velocity < 0:
+            self.direction = 0
+
+        if self.move_side == 0:
+            if self.y_cord >= 750:
+                self.move_side = 1
+                #self.clock_move = 0
+        elif self.move_side == 1:
+            self.go_up()
+            if self.y_cord <= 10:
+                self.move_side = 0
+                #self.clock_move = 0
+        elif self.move_side == 2:
+            self.go_left()
+            if self.x_cord < 10:
+                self.move_side = 3
+                #self.clock_move = 0
+        elif self.move_side == 3:
+            self.go_right()
+            if self.x_cord >= 1880:
+                self.move_side = 2
+                #self.clock_move = 0
+
+        if self.hp < self.max_hp:
+            self.angry = True
+
+    def draw(self, window):
+        if self.hor_velocity != 0:
+            if self.direction == 1:
+                window.blit(self.fly_right_img[floor(self.index)], (self.x_cord, self.y_cord))
+            elif self.direction == 0:
+                window.blit(self.fly_left_img[floor(self.index)], (self.x_cord, self.y_cord))
+            self.index += 0.4
+            if self.index > 3:
+                self.index = 0
 
 ####################################################################################################################
 # Plants

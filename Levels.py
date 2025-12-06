@@ -15,7 +15,7 @@ from Informations import Stats, Waves_Tab, Walls_Position
 from Enemy import \
     Ghost, Ghost_Shooter, Zombie_Tank, Lich, Skeleton_Turrets, Skeleton_Shooter, \
     Soldier_Ghost, Soldier_Tank, Roman_Shaman, Zeus, \
-    Fire_Bug
+    Fire_Bug, Fire_Bee
 
 window = pygame.display.set_mode((1920, 1080))
 pygame.init()
@@ -515,6 +515,13 @@ class LVL3(Levels):
                         self.enemies.append(Fire_Bug(200, 5, 30, 2))
                 else:
                     self.enemies.append(Fire_Bug(200, 5, 30, 2))
+            '''-----Fire_Bee-----'''
+            if not self.waves[wave][1] == 0:
+                if self.waves[wave][1] > 1:
+                    for enemy in range(self.waves[wave][0]):
+                        self.enemies.append(Fire_Bee(200, 5, 30, 2))
+                else:
+                    self.enemies.append(Fire_Bee(200, 5, 30, 2))
 
             for e in self.enemies:
                 print(e)

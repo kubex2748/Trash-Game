@@ -225,7 +225,9 @@ class Waves_Tab:
         ]
 
         self.lvl_3_mobs_stats = [
-            [300, 0.5, 5, 4],                           # Bug
+            # HP  CD  DMG  walk
+            [300, 0.5, 5, 4],       # Bug
+            [300, 0.5, 5, 7],       # Bee
         ]
 
 
@@ -248,7 +250,7 @@ class Waves_Tab:
         ]
 
         self.lvl_3 = [
-            [1],
+            [0, 1],
         ]
 
         self.lvl_4 = [
@@ -267,7 +269,7 @@ class Waves_Tab:
         self.mob_stats = []
         if lvl == 1:
             self.tab = self.lvl_1
-            self.mob_stats = self.mob_stats
+            self.mob_stats = self.lvl_1_mobs_stats
         elif lvl == 2:
             self.tab = self.lvl_2
             self.mob_stats = self.lvl_2_mobs_stats
