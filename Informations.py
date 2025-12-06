@@ -225,7 +225,7 @@ class Waves_Tab:
         ]
 
         self.lvl_3_mobs_stats = [
-            [100, 0.5, 5, 4],                           # Bug
+            [300, 0.5, 5, 4],                           # Bug
         ]
 
 
@@ -310,6 +310,7 @@ class Walls_Position:
             [0, 0, 1, 930, 0, 0, 0, True],
             [1920, 0, 1, 930, 0, 0, 0, True],
             [0, 890, 1920, 40, 0, 0, 0, True],
+            [902, 780, 500, 8, 80, 68, 56, False],
         ]
 
         self.lvl4 = [

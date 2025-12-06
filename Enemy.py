@@ -557,18 +557,31 @@ class Fire_Bug(Enemy):
         self.stand_angry_img = [pygame.image.load(f'graph/enemy/lvl3/floor_bug/floor_bug_angry_{x}.png') for x in range(1, 6)]
         self.shot_img = [pygame.image.load(f'graph/enemy/lvl3/floor_bug/shot/floor_bug_shot_{x}.png') for x in range(1, 6)]
 
+        self.spell_lengh = 2
+        self.burst = 1.5
+
+        self.angry = False
+        self.ult = False
+        self.clock_angry = 0
+        self.angry_cd = 5
+        self.index = 0
+
         self.walk_index = 0
         self.direction = 0
         x = randint(100, 1800)
         self.max_speed = randint(1, max_speed)
         Enemy.__init__(self, x, 700, hp, cd, dmg, 0.6, self.max_speed, self.image)
 
+
+
     def tick(self, walls, player, delta):
+        self.clock_angry += delta
+        self.clock += delta
+
         self.physic_tick(walls)
         self.health_tick(delta)
         self.tick_mele(delta)
         self.attack_mele(player)
-        self.fx.zombie_sound(delta)
 
         if self.hor_velocity > 0:
             self.direction = 1
@@ -576,21 +589,48 @@ class Fire_Bug(Enemy):
             self.direction = 0
 
         if not self.hitbox.colliderect(player.hitbox):
-            if self.x_cord + self.distance > player.x_cord:
+            if self.x_cord + self.distance > player.x_cord - 20:
                 self.go_left()
-            elif self.x_cord + self.distance < player.x_cord:
+            elif self.x_cord + self.distance < player.x_cord - 20:
                 self.go_right()
+
+        if self.y_cord + self.height > player.y_cord + player.height and self.x_cord + 30 >= player.x_cord >= self.x_cord - 10:
+            if self.clock_angry >= self.angry_cd and not self.angry:
+                self.angry = True
+                self.clock_angry = 0
+        else:
+            self.angry = False
+
+        if self.angry:
+            if self.clock_angry > 3:
+                self.ult = True
+                if pygame.Rect(self.x_cord, self.y_cord - self.shot_img[0].get_height() + 20, self.shot_img[0].get_width(), self.shot_img[0].get_height()).colliderect(player.hitbox):
+                    if self.clock >= 0.5:
+                        player.dealt_dmg(floor(self.dmg * self.burst))
+                        self.clock = 0
+                if self.clock_angry - 3 >= self.spell_lengh or not player.alive:
+                    self.angry = False
+                    self.ult = False
+                    self.clock_angry = 0
 
     def draw(self, window):
         self.draw_hp(window, self.x_cord, self.y_cord - 15, self.width, 8)
-        if self.hor_velocity != 0:
-            window.blit(self.walk_img[floor(self.walk_index)], (self.x_cord, self.y_cord))
+        if not self.angry:
             self.walk_index += 0.4
             if self.walk_index > 4:
                 self.walk_index = 0
-        else:
-            if self.direction == 1:
+            if self.hor_velocity != 0:
+                window.blit(self.walk_img[floor(self.walk_index)], (self.x_cord, self.y_cord))
+            else:
                 window.blit(self.stand_img, (self.x_cord, self.y_cord))
+        else:
+            self.index += 0.4
+            if self.index > 5:
+                self.index = 0
+            window.blit(self.stand_angry_img[floor(self.index)], (self.x_cord, self.y_cord))
+            if self.ult:
+                window.blit(self.shot_img[floor(self.index)], (self.x_cord + 30, self.y_cord - self.shot_img[0].get_height() + 20))
+
 
 ####################################################################################################################
 # Plants
