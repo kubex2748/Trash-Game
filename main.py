@@ -201,6 +201,7 @@ class Start_Menu:
             self.exit_button.draw(window)
 
             '''-----LOGIN-----'''
+            '''
             self.NICKNAME = self.nick_input.tick(self.clock, events, delta)
             if self.NICKNAME != '':
                 if self.NICKNAME == 'admin':
@@ -220,7 +221,7 @@ class Start_Menu:
             if self.pre_admin_state:
                 passw = self.pass_input.tick(self.clock, events, delta)
                 self.pass_input.draw(window)
-
+            '''
             '''-----CHAR_CHOOSE-----'''
             '''
                 You can create 4 saves and then chose one of 5.

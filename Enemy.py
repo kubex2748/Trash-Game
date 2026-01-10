@@ -303,10 +303,10 @@ class Skeleton_Turrets(Enemy):
 
 
 class Lich(Boss):
-    def __init__(self, hp, cd, dmg, win):
+    def __init__(self, hp, cd, dmg, max_speed, win):
         lich_image ='graph/enemy/lvl1/lich'
         # self, win, hp, cd, ult_dmg, acc, walk_speed, enemy_img, spell_img, shooter, coll
-        Boss.__init__(self, win, hp, cd, dmg, 1, 4, lich_image, 'graph/spels/spel_lich', True, False)
+        Boss.__init__(self, win, hp, cd, dmg, 1, max_speed, lich_image, 'graph/spels/spel_lich', True, False)
         self.right_img = pygame.image.load(f'{lich_image}.png')  # normalna grafika
         self.left_img = pygame.transform.flip(pygame.image.load(f'{lich_image}.png'), True, False)
         self.distance = 0
