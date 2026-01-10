@@ -329,6 +329,7 @@ class LVL1(Levels):
                             self.wave_tab.mob_stats[5][1],
                             self.wave_tab.mob_stats[5][2],
                             self.wave_tab.mob_stats[5][3],
+                            window
                         ))
                 else:
                     self.enemies.append(Lich(
@@ -336,6 +337,7 @@ class LVL1(Levels):
                             self.wave_tab.mob_stats[5][1],
                             self.wave_tab.mob_stats[5][2],
                             self.wave_tab.mob_stats[5][3],
+                            window
                     ))
 
             for e in self.enemies:
