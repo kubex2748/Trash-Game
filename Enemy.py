@@ -305,7 +305,7 @@ class Skeleton_Turrets(Enemy):
 class Lich(Boss):
     def __init__(self, hp, cd, dmg, max_speed, win):
         lich_image ='graph/enemy/lvl1/lich'
-        # self, win, hp, cd, ult_dmg, acc, walk_speed, enemy_img, spell_img, shooter, coll
+                    # self, win, hp, cd, dmg, acc, walk_speed, enemy_img, spell_img, shooter, coll
         Boss.__init__(self, win, hp, cd, dmg, 1, max_speed, lich_image, 'graph/spels/spel_lich', True, False)
         self.right_img = pygame.image.load(f'{lich_image}.png')  # normalna grafika
         self.left_img = pygame.transform.flip(pygame.image.load(f'{lich_image}.png'), True, False)
@@ -319,14 +319,12 @@ class Lich(Boss):
 
 
     def tick(self, walls, player, delta):
-
         self.physic_tick(walls)
         self.health_tick(delta)
         self.phase_timer(delta)
         self.tick_mele(delta)
         self.tick_shot(walls, self, delta, player)
 
-#############################################################################################
         if self.phase_counter == 1:
             self.fx.lich_sound(delta)
 
@@ -345,8 +343,6 @@ class Lich(Boss):
                     self.go_left()
                 elif self.x_cord + self.distance < player.x_cord:
                     self.go_right()
-
-#############################################################################################
         elif self.phase_counter == 2:
             self.ult_pos()
             if self.y_cord <= 100 and not self.pahase_pos:
@@ -357,8 +353,6 @@ class Lich(Boss):
             if len(player.enemies) == 1 and self.pahase_pos:
                 self.phase_counter = 3
                 self.pahase_pos = False
-
-#############################################################################################
         if self.phase_counter == 3:
             self.fx.lich_sound(delta)
 
@@ -385,7 +379,6 @@ class Lich(Boss):
                 elif self.x_cord + self.distance < player.x_cord:
                     self.go_right()
 
-#############################################################################################
         if self.hor_velocity > 0:
             self.direction = 1
         elif self.hor_velocity < 0:
@@ -519,6 +512,10 @@ class Zeus(Boss):
         self.max_speed = randint(2, max_speed)
         Boss.__init__(self, win, hp, cd, dmg, 1, self.max_speed, 'graph/enemy/lvl2/zeus/zeus_1', 'graph/spels/spel_thunder', True, True)
         self.zeus_img = [pygame.image.load(f'graph/enemy/lvl2/zeus/zeus_{x}.png') for x in range(1, 6)]
+        self.ult_img = pygame.image.load('graph/spels/thunder_drop_down.png')
+        self.ult_width, self.ult_hight = self.ult_img.get_size()
+
+
         self.distance = 600
         self.min_dis = False
         self.gravity = 0.15
@@ -528,23 +525,33 @@ class Zeus(Boss):
 
     def ult_spell(self, player, delta, win, dmg):
         self.clock_active += delta
-        if self.ult_activ and self.clock_active > 0.4:
-            self.x_cord_u += 100
-            win.blit(pygame.image.load('graph/spels/thunder_drop_down.png'), (self.x_cord_u, 0))
-            if player.hitbox.colliderect(self.hitbox):
-                player.dealt_dmg(dmg, 0)
+
+        if self.ult_activ and self.clock_active > 0.3:
+            self.clock_active = 0
+            self.x_cord_u += 150
+            win.blit(self.ult_img, (self.x_cord_u, 0))
+            if player.hitbox.colliderect(pygame.Rect(self.x_cord_u, 0, self.ult_width, self.ult_hight)):
+                player.dealt_dmg(dmg)
 
             if self.x_cord_u >= 1920:
                 self.ult_activ = False
+                self.clock_ult = 0
+                self.clock_active = 0
 
 
     def tick(self, walls, player, delta):
         self.physic_tick(walls)
         self.health_tick(delta)
-        self.tick_shot(walls, self, delta, player)
+        #self.tick_shot(walls, self, delta, player)
         self.attack_dist(player)
-        if self.ult_cd_counter(delta, 5):
+        self.clock_ult += delta
+        if self.clock_ult >= 5:
+            # somewhen here will be ult animation
+            if not self.ult_activ:
+                self.ult_activ = True
             self.ult_spell(player, delta, self.win, 50)
+
+
         self.fx.ghost_sound(delta)
 
         if not self.hitbox.colliderect(player.hitbox):
