@@ -327,8 +327,11 @@ class Lich(Boss):
         self.tick_shot(walls, self, delta, player)
 
 #############################################################################################
-        if self.phase_counter == 1 or self.phase_counter == 3 or self.phase_counter == 5:
+        if self.phase_counter == 1:
             self.fx.lich_sound(delta)
+
+            if self.hp < self.max_hp * 0.7:
+                self.phase_counter = 2
 
             if abs(self.x_cord - player.x_cord) > 50 or abs(self.y_cord - player.y_cord) > 100:
                 self.attack_dist(player)
@@ -342,29 +345,45 @@ class Lich(Boss):
                     self.go_left()
                 elif self.x_cord + self.distance < player.x_cord:
                     self.go_right()
-#############################################################################################
-        elif self.phase_counter == 2 or self.phase_counter == 4:
-            self.ult_pos()
 
-###############################################
+#############################################################################################
+        elif self.phase_counter == 2:
+            self.ult_pos()
             if self.y_cord <= 100 and not self.pahase_pos:
-                #self.summon(player, Ghost_Shooter(50, 1.5, 10, 6), 3)
                 for t in range(3):
                     player.enemies.append(Ghost_Shooter(50, 1.5, 10, 6))
-                for e in player.enemies:
-                    if not e == 0:
-                        self.all_summons_alive = False
-                        self.phase_counter = 3
-                        self.take_dmg = True
                 self.pahase_pos = True
 
-                #self.summon(Ghost_Shooter, 2)
-                #self.take_dmg = True
-#############################################################################################
-        if self.hp < self.max_hp * 0.7 and self.phase_counter == 1:
-            print("hp 70")
-            self.phase_counter = 2
+            if len(player.enemies) == 1 and self.pahase_pos:
+                self.phase_counter = 3
+                self.pahase_pos = False
 
+#############################################################################################
+        if self.phase_counter == 3:
+            self.fx.lich_sound(delta)
+
+            if not self.pahase_pos:
+                for t in range(3):
+                    player.enemies.append(Ghost_Shooter(50, 1.5, 10, 6))
+                for t in range(5):
+                    player.enemies.append(Ghost(70, 1.5, 10, 6))
+                self.pahase_pos = True
+            
+            if len(player.enemies) == 1 and self.pahase_pos:
+                self.take_dmg = True
+
+            if abs(self.x_cord - player.x_cord) > 50 or abs(self.y_cord - player.y_cord) > 100:
+                self.attack_dist(player)
+            else:
+                self.attack_mele(player, 10)
+
+            if not self.hitbox.colliderect(player.hitbox):
+                if self.y_cord + self.distance > player.y_cord + 15 and self.y_cord > 100:
+                    self.go_up()
+                if self.x_cord + self.distance > player.x_cord:
+                    self.go_left()
+                elif self.x_cord + self.distance < player.x_cord:
+                    self.go_right()
 
 #############################################################################################
         if self.hor_velocity > 0:
