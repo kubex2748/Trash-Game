@@ -528,6 +528,7 @@ class Zeus(Boss):
             self.clock_active = 0
             self.x_cord_u += 150
             win.blit(self.ult_img, (self.x_cord_u, 0))
+            self.fx.global_spel_sounds(2)
             if player.hitbox.colliderect(pygame.Rect(self.x_cord_u, 0, self.ult_width, self.ult_hight)):
                 player.dealt_dmg(dmg)
 
@@ -555,6 +556,7 @@ class Zeus(Boss):
             if self.clock_ult >= 0.5:
                 self.x_cord_u = randint(0, 1870)
                 self.win.blit(self.ult_img, (self.x_cord_u, 0))
+                self.fx.global_spel_sounds(2)
                 if player.hitbox.colliderect(pygame.Rect(self.x_cord_u, 0, self.ult_width, self.ult_hight)):
                     player.dealt_dmg(self.ult_dmg)
 

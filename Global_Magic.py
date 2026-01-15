@@ -4,6 +4,7 @@ from math import floor
 from GUI import GUI
 from Informations import Links
 from Attack import Magic
+from Physic import Physic
 
 
 class Global_Magic:
@@ -48,6 +49,70 @@ class Global_Magic:
             if self.clock >= self.cd:
                 self.cd_count = False
 
+
+class Summon_Ghost(Global_Magic, Physic):
+    def __init__(self, player, window, cd, dmg, mana_req, spell_id):
+        Global_Magic.__init__(self, player, window, cd, dmg, mana_req, spell_id)
+
+        self.x_cord = 0
+        self.y_cord = 0
+
+        self.nearest_x = 0
+        self.nearest_y = 0
+
+        self.bullets = []  # lista pocisków Magic
+        self.spell_img = 'graph/spels/spel_plant'
+
+        self.speed = 15             # bullets speed
+        self.fire_rate = 1          # attack speed
+        self.lifetime = 30          # lifetime
+
+        self.alive_time = 0         # ile już działa
+        self.cooldown = 0.0         # timer do kolejnego strzału
+
+    def spell_it(self):
+        if self.player.current_mana >= self.req and not self.cd_count:
+            if not self.spell_activ:
+                self.x_cord = self.player.x_cord
+                self.y_cord = self.player.y_cord
+                self.clock = 0
+                self.spell_activ = True
+                self.player.current_mana -= self.req
+
+    def tick(self, delta, enemies, walls):
+        self.clock += delta
+        self.cooldown = max(0.0, self.cooldown - delta)
+        self.cd_counter()
+        if self.spell_activ:
+            self.draw()
+            if self.clock >= self.lifetime:
+                self.spell_activ = False
+                self.clock = 0
+                self.cd_count = True
+
+            nearest = None
+            nearest_dist = float('inf')
+            x_side = y_side = 0
+
+            for e in enemies:
+                dx = e.x_cord - self.x_cord
+                dy = e.y_cord - self.y_cord
+                dist2 = dx*dx + dy*dy
+                if dist2 < nearest_dist:
+                    nearest_dist = dist2
+                    nearest = e
+                    self.nearest_x, self.nearest_x = e.x_cord, e.y_cord
+
+            # strzelaj co 'fire_rate' sekund
+            if nearest and self.cooldown <= 0.0:
+                pass
+                #self.cooldown = self.fire_rate
+
+
+    def draw(self):
+        self.win.blit(self.img, (self.x_cord, self.y_cord))
+        for bullet in self.bullets:
+            bullet.draw(self.win)
 
 class Poison_Hit(Global_Magic):
     def __init__(self, player, window, cd, dmg, mana_req, spell_id):

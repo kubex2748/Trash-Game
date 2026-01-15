@@ -39,6 +39,7 @@ class Player(Physic, Health):
         self.magic_speed = 20
         self.AA_mana_req = 5        # Auto Atack
         self.enemies = []
+        self.summons = []
 
         self.current_mana = self.max_mana
         self.gui = GUI(self.win)
