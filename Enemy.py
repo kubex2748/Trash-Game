@@ -513,7 +513,7 @@ class Zeus(Boss):
         self.ult_img = pygame.image.load('graph/spels/thunder_drop_down.png')
         self.ult_width, self.ult_hight = self.ult_img.get_size()
 
-
+        self.ult_dmg = 20
         self.distance = 600
         self.min_dis = False
         self.gravity = 0.15
@@ -531,8 +531,9 @@ class Zeus(Boss):
             if player.hitbox.colliderect(pygame.Rect(self.x_cord_u, 0, self.ult_width, self.ult_hight)):
                 player.dealt_dmg(dmg)
 
-            if self.x_cord_u >= 1920:
+            if self.x_cord_u >= 1870:
                 self.ult_activ = False
+                self.x_cord_u = 0
                 self.clock_ult = 0
                 self.clock_active = 0
 
@@ -543,11 +544,19 @@ class Zeus(Boss):
         #self.tick_shot(walls, self, delta, player)
         self.attack_dist(player)
         self.clock_ult += delta
-        if self.clock_ult >= 5:
-            # somewhen here will be ult animation
-            if not self.ult_activ:
-                self.ult_activ = True
-            self.ult_spell(player, delta, self.win, 50)
+        if self.hp >= self.max_hp * 0.3:
+            self.clock_ult += delta
+            if self.clock_ult >= 5:
+                # somewhen here will be ult animation
+                if not self.ult_activ:
+                    self.ult_activ = True
+                self.ult_spell(player, delta, self.win, self.ult_dmg)
+        else:
+            if self.clock_ult >= 0.5:
+                self.x_cord_u = randint(0, 1870)
+                self.win.blit(self.ult_img, (self.x_cord_u, 0))
+                if player.hitbox.colliderect(pygame.Rect(self.x_cord_u, 0, self.ult_width, self.ult_hight)):
+                    player.dealt_dmg(self.ult_dmg)
 
 
         self.fx.ghost_sound(delta)

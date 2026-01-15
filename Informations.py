@@ -208,12 +208,12 @@ class Waves_Tab:
     def __init__(self, lvl):
         self.lvl_1_mobs_stats = [
             # HP  CD  DMG walk
-            [100, 0.5, 5,  4],                          # Ghost
-            [50,  1.5, 10, 6],                          # Shooter
-            [300, 1.5, 5,  2],                          # Zombie
-            [400, 30,  1],                              # Turret
-            [100, 2,   20, 5],                          # Skeleton
-            [100, 100, 300, 0.5],                       # Lich
+            [100, 0.5, 5,  4    ],                          # Ghost
+            [50,  1.5, 10, 6    ],                          # Shooter
+            [300, 1.5, 5,  2    ],                          # Zombie
+            [400, 1,   10       ],                          # Turret
+            [100, 2,   10,  5   ],                          # Skeleton
+            [100, 100, 300, 0.5 ],                          # Lich
         ]
 
         self.lvl_2_mobs_stats = [
@@ -232,7 +232,7 @@ class Waves_Tab:
 
 
         self.lvl_1 = [  # ghost, shooter, tank, turret, skeleton, lich
-            [0, 1, 0, 1, 0, 0],
+            [0, 0, 0, 1, 0, 0],
             #[1, 1, 1, 1, 1, 1],
             [1, 1, 0, 0, 0, 0],
             [2, 0, 1, 0, 0, 0],
@@ -250,7 +250,7 @@ class Waves_Tab:
         ]
 
         self.lvl_3 = [
-            [0, 1],
+            [1, 0],
         ]
 
         self.lvl_4 = [
