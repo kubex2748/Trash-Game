@@ -17,7 +17,10 @@ from Enemy import \
     Soldier_Ghost, Soldier_Tank, Roman_Shaman, Zeus, \
     Fire_Bug, Fire_Bee
 
-window = pygame.display.set_mode((1920, 1080))
+window = pygame.display.set_mode(
+    (0, 0),
+    pygame.NOFRAME
+)
 pygame.init()
 pygame.display.set_icon(pygame.image.load('graph/menu/logo.png'))
 pygame.display.set_caption('TrashGame')

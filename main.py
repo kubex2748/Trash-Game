@@ -9,7 +9,10 @@ from Map_Editor import Editor, Admin_Room
 from Sound_Controller import FX
 
 pygame.init()
-window = pygame.display.set_mode((1920, 1080))
+window = pygame.display.set_mode(
+    (0, 0),
+    pygame.NOFRAME
+)
 pygame.display.set_icon(pygame.image.load('graph/menu/logo.png'))
 pygame.display.set_caption('TrashGame')
 ########################################################################################################################
@@ -36,7 +39,7 @@ class Start_Menu:
 
         self.NICKNAME = ''
         self.MAX_SCORE = 0
-        self.LEVEL = 0          #admin = 0
+        self.LEVEL = 0          #GOD_MODE = 0
         self.LOGED = False
         self.COINS = 0
         if self.LEVEL == 0:
@@ -52,7 +55,7 @@ class Start_Menu:
         '''-----LOGIN-----'''
         # submit_button = Button(270, 450, "graph/menu/buttons/button_SUBMIT")
         self.pre_admin_state = False                                                                # if u try to log as admin -> True
-        self.data_manag = Save_Manager('G:\python_worksapce\Platform_Game\data\data.json')
+        #self.data_manag = Save_Manager('G:\python_worksapce\Platform_Game\data\data.json')
         self.nick_input = Text_Input(270, 350, 150, 40, 20, 'nickname', True, 270, 450)
         self.pass_input = Text_Input(270, 400, 150, 40, 20, 'password')
         # max_score = pygame.font.Font.render(self.arial_24, f'', True, (0, 0, 0))

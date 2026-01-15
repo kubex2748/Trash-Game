@@ -83,8 +83,6 @@ class Enemy(Physic, Health):
 
     def tick_shot(self, walls, slf, delta, enemies):        #slf = self
         self.clock += delta
-        #self.x_cord = slf.x_cord
-        #self.y_cord = slf.y_cord
         for bullet in self.bullets:
             bullet.tick(walls, delta, enemies, False)
             if not bullet.exists:
@@ -285,14 +283,14 @@ class Skeleton_Shooter(Enemy):
 
 class Skeleton_Turrets(Enemy):
     def __init__(self, hp, cd, dmg):
-        self.plant_image = 'graph/enemy/lvl1/skeleton_turret'
-        self.stand_right_img = pygame.image.load(f'{self.plant_image}.png')
-        self.stand_left_img = pygame.transform.flip(pygame.image.load(f'{self.plant_image}.png'), True, False)
+        self.skeleton_turret_image = 'graph/enemy/lvl1/skeleton_turret'
+        self.stand_right_img = pygame.image.load(f'{self.skeleton_turret_image}.png')
+        self.stand_left_img = pygame.transform.flip(pygame.image.load(f'{self.skeleton_turret_image}.png'), True, False)
         self.min_dis = False
         x = randint(100, 1800)
         y = randint(100, 200)
 
-        Enemy.__init__(self, x, y, hp, cd, dmg, 1, 1, self.plant_image, 'graph/spels/arrow', True)
+        Enemy.__init__(self, x, y, hp, cd, dmg, 1, 1, self.skeleton_turret_image, 'graph/spels/arrow', True)
 
     def tick(self, walls, player, delta):
         self.physic_tick(walls)
