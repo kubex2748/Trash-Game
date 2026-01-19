@@ -22,9 +22,13 @@ class Drop(Physic):
 
 
 class Mana_Potion(Drop):
-    def __init__(self, window, value):
-        x = randint(100, 1800)
-        y = randint(50, 100)
+    def __init__(self, window, value, _x=-1, _y=-1):
+        if _x == -1:
+            x = randint(100, 1800)
+            y = randint(50, 100)
+        else:
+            x = _x
+            y = _y
         Drop.__init__(self, window, x, y, 'mana_pot_img')
         self.val = value
 
@@ -42,9 +46,13 @@ class Mana_Potion(Drop):
 
 
 class HP_Potion(Drop):
-    def __init__(self, window, value):
-        x = randint(100, 1800)
-        y = randint(50, 100)
+    def __init__(self, window, value, _x=-1, _y=-1):
+        if _x == -1:
+            x = randint(100, 1800)
+            y = randint(50, 100)
+        else:
+            x = _x
+            y = _y
         Drop.__init__(self, window, x, y, 'hp_pot_img')
         self.val = value
 

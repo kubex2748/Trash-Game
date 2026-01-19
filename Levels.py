@@ -28,6 +28,40 @@ pygame.display.set_caption('TrashGame')
 
 class Levels:
     def __init__(self, wand_id, FX_active, maps, stand_spells, player_lvl):
+        """----OPTIONS----"""
+
+        # player bonus
+        self.x_start = -1
+        self.y_start = -1
+
+        self.hp_bonus = 0
+        self.mama_bonus = 0
+        self.cd_bonus = 0
+        self.dmg_bonus = 0
+        self.speed_bonus = 0
+
+        self.mana_on_e_kill = 20
+        """---------------"""
+
+        # enemy bonus 
+        self.e_hp_bonus = 0
+        self.e_mama_bonus = 0
+        self.e_cd_bonus = 0
+        self.e_dmg_bonus = 0
+        self.e_speed_bonus = 0
+        """---------------"""
+        # drop ratio
+        self.mana_pro = 4                               # 1 / 4 = 25% 
+        self.mana_potion_pos = [-1, -1]                 # -1 => random
+
+        self.hp_pro = 4                                 
+        self.hp_potion_pos = [-1, -1]
+        self.drop_time = 10                             # 1 / 10s 
+        """---------------"""
+        
+
+        """---------------"""
+
         """----OBJECTS----"""
         self.gui = GUI(window)
         self.wave_tab = Waves_Tab(maps)
@@ -52,14 +86,12 @@ class Levels:
         self.waves = self.wave_tab.tab
         self.wand_id = wand_id
         self.walls = []
-        self.bonus_mana = 20
         self.admin_mod = False
         if player_lvl == 0:
             self.admin_mod = True
 
         '''----DROPS----'''
         self.clock_drops = 0
-        self.drop_time = 10
         self.drops = []
 
         '''----SPELLS----'''
@@ -118,9 +150,9 @@ class Levels:
     def drop_tick(self, delta):
         self.clock_drops += delta
         if self.clock_drops >= self.drop_time:
-            if randint(0, 4) == 0:
+            if randint(0, self.hp_pro-1) == 0:
                 self.drops.append(Mana_Potion(window, 30))
-            else:
+            if randint(0, self.mana_pro-1) == 0:
                 self.drops.append(HP_Potion(window, 30))
             self.clock_drops = 0
         for d in self.drops:
@@ -137,8 +169,8 @@ class Levels:
             if not enemy.alive:
                 x, y = enemy.x_cord, enemy.y_cord - 50
                 self.drops.append(Coin(window, x, y))
-                if player.current_mana < player.max_mana and player.current_mana + self.bonus_mana < player.max_mana:
-                    player.current_mana += self.bonus_mana
+                if player.current_mana < player.max_mana and player.current_mana + self.mana_on_e_kill < player.max_mana:
+                    player.current_mana += self.mana_on_e_kill
                 enemies.remove(enemy)
                 self.death_animation(window, x, y)
             if len(enemies) == 0:
@@ -782,8 +814,8 @@ class LVL_BONUS(Levels):
             for enemy in self.enemies:
                 if not enemy.alive:
                     x, y = enemy.x_cord, enemy.y_cord - 50
-                    if self.player.current_mana < self.player.max_mana and self.player.current_mana + self.bonus_mana < self.player.max_mana:
-                        self.player.current_mana += self.bonus_mana
+                    if self.player.current_mana < self.player.max_mana and self.player.current_mana + self.mana_on_e_kill < self.player.max_mana:
+                        self.player.current_mana += self.mana_on_e_kill
                     self.enemies.remove(enemy)
                     self.death_animation(window, x, y)
                 if len(self.enemies) == 0:
