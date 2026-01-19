@@ -12,14 +12,14 @@ from Global_Magic import Thunder_Bolt, Explosion, Good_Helper, Ice_Slow, Poison_
 
 
 class Player(Physic, Health):
-    def __init__(self, window, x, y, hp, mana, cd, dmg, max_speed, wand_id, spells_id):
+    def __init__(self, window, x, y, max_hp, max_mana, cd, dmg, max_speed, wand_id, spells_id):
         self.win = window
         self.fx = FX()
         self.stand_right_img = pygame.image.load('graph/player/player_stand.png')  # normalna grafika
         self.stand_left_img = pygame.transform.flip(pygame.image.load('graph/player/player_stand.png'), True, False)
         width = self.stand_right_img.get_width()  # szerokość
         height = self.stand_right_img.get_height()  # wysokość
-        Health.__init__(self, hp, True)
+        Health.__init__(self, max_hp, True)
         Physic.__init__(self, x, y, width, height, 1, max_speed)
         self.jump_right_img = pygame.image.load('graph/player/player_jump.png')  # grafika skoku
         self.jump_left_img = pygame.transform.flip(pygame.image.load('graph/player/player_jump.png'), True, False)  # grafika skoku
@@ -32,17 +32,16 @@ class Player(Physic, Health):
 
         self.score_sum = 1
 
-        self.max_mana = mana
-        self.cd = cd
-        self.hp = hp
-        self.dmg = dmg
+        self.stats = [max_hp, max_mana, cd, dmg, max_speed]
+        self.hp = max_hp
+
         self.magic_speed = 20
         self.AA_mana_req = 5        # Auto Atack
         self.enemies = []
         self.summons = []
 
-        self.current_mana = self.max_mana
-        self.gui = GUI(self.win)
+        self.current_mana = max_mana
+        self.gui = GUI(self.win, self.stats)
         self.clock_shot = 0
         self.clock_hp = 5
 
@@ -50,7 +49,7 @@ class Player(Physic, Health):
         self.spells_id = spells_id
         self.spells = []
 
-        self.mana_reg = Mana_Regen(self.win, 5, self.max_mana, 10)
+        self.mana_reg = Mana_Regen(self.win, 5, max_mana, 10)
         self.boost = 1
 
         self.choose_spell()
@@ -193,7 +192,7 @@ class Player(Physic, Health):
 
     def draw(self, window):
         self.draw_hp(window, self.x_cord, self.y_cord - 15, self.width, 8)
-        self.gui.draw_on_GUI(self.max_mana, self.max_hp)
+        self.gui.draw_on_GUI(self.stats)
 
         if self.jumping:
             if self.direction == 1:
