@@ -43,20 +43,34 @@ class Levels:
         self.mana_on_e_kill = 20
         """---------------"""
 
+        # spells stats
+        self.spells_stats_tab = [
+            [5, 10          ],                      # Mana regen  cd, value 
+            [10, 50,  10    ],                      # HP regen    cd, value, req
+            [15, 250, 20    ],                      # Flash       cd, value, req
+            [30, 3,   40,  7],                      # Boost       cd, value, req, lenght
+        ]
+        """---------------"""
         # enemy bonus 
         self.e_hp_bonus = 0
         self.e_mama_bonus = 0
         self.e_cd_bonus = 0
         self.e_dmg_bonus = 0
         self.e_speed_bonus = 0
+
+        self.turets_positions = [
+            # x   y
+            [-1, -1],                               # 1st pos (-1 => random)
+        ]
         """---------------"""
+
         # drop ratio
-        self.mana_pro = 4                               # 1 / 4 = 25% 
-        self.mana_potion_pos = [-1, -1]                 # -1 => random
+        self.mana_pro = 4                           # 1 / 4 = 25% 
+        self.mana_potion_pos = [-1, -1]             # -1 => random
 
         self.hp_pro = 4                                 
         self.hp_potion_pos = [-1, -1]
-        self.drop_time = 10                             # 1 / 10s 
+        self.drop_time = 10                         # 1 / 10s 
         """---------------"""
         
 
@@ -111,6 +125,9 @@ class Levels:
             self.wand_id,
             stand_spells
         )
+
+        self.ally = []
+        #self.ally.append(self.player)
         #print(f'stand_spells in Levels: {stand_spells}')
 
         """----TIME----"""
@@ -118,7 +135,7 @@ class Levels:
         self.clock = 0
         self.second = 0
         self.minute = 0
-        self.seconds_text = pygame.font.Font.render(pygame.font.SysFont("arial", 72), '', True, (0, 0, 0))
+        self.seconds_text = pygame.font.Font.render(self.arial_72, '', True, (0, 0, 0))
 
         """----BREAK----"""
         self.gameover_img = pygame.image.load('graph/menu/win.png')
@@ -131,7 +148,7 @@ class Levels:
         fx = FX(FX_active)
         fx.open_wave_sound()
 
-    """----SCORE----"""
+    """----UPDATE----"""
     def game(self):
         if self.admin_mod:
             self.fps_text = pygame.font.Font.render(self.arial_42, f'FPS: {floor(self.clock_obj.get_fps())}', True, (0, 0, 0))
@@ -146,7 +163,7 @@ class Levels:
                 self.pause = not self.pause
         self.gui.draw_GUI()
         self.gui.draw_standards_spell(self.spells)
-
+    
     def drop_tick(self, delta):
         self.clock_drops += delta
         if self.clock_drops >= self.drop_time:
@@ -191,6 +208,7 @@ class Levels:
             self.second = 0
             self.minute += 1
 
+    """----BREAK----"""
     def def_pause(self, delta):
         self.player.controll_active = False
         self.timer_on = False
@@ -227,7 +245,8 @@ class Levels:
 
     def get_win(self):
         return self.win
-
+    
+    """----SETUP / CALC----"""
     def set_spell(self, which, what):
         self.spells[which] = what
 

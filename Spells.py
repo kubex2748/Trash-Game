@@ -42,7 +42,7 @@ class Spells:
 
 
 class Mana_Regen:
-    def __init__(self, window,  cd, max_mana, value):
+    def __init__(self, window, max_mana, cd, value):
         self.cd = cd
         self.max_mana = max_mana
         self.value = value
@@ -69,7 +69,7 @@ class Mana_Regen:
 
 
 class HP_regen(Spells):
-    def __init__(self, player, window, cd, mana_req, value, field):
+    def __init__(self, player, window, cd, value, mana_req, field):
         Spells.__init__(self, player, window, cd, value, mana_req, field)
 
     def spell_it(self):
@@ -94,7 +94,7 @@ class HP_regen(Spells):
 
 
 class Damage_Boost(Spells):
-    def __init__(self, player, window, cd, mana_req, spell_lenght, value, field):
+    def __init__(self, player, window, cd, value, mana_req, spell_lenght, field):
         Spells.__init__(self, player, window, cd, value, mana_req, field)
 
         self.dmg_boost_activ_img = pygame.image.load('graph/spels/attack_boost_activ.png')

@@ -33,6 +33,7 @@ class Player(Physic, Health):
         self.score_sum = 1
 
         self.stats = [max_hp, max_mana, cd, dmg, max_speed]
+        self.max_mana = max_mana
         self.hp = max_hp
 
         self.magic_speed = 20
@@ -49,7 +50,7 @@ class Player(Physic, Health):
         self.spells_id = spells_id
         self.spells = []
 
-        self.mana_reg = Mana_Regen(self.win, 5, max_mana, 10)
+        self.mana_reg = Mana_Regen(self.win, max_mana, 5, 10)
         self.boost = 1
 
         self.choose_spell()
@@ -81,11 +82,11 @@ class Player(Physic, Health):
     def choose_spell(self):
         for i in range(0, 3):
             if self.spells_id[i] == 0:
-                self.spells.append(HP_regen(self, self.win, 10, 10, 50, i+1))
+                self.spells.append(HP_regen(self, self.win, 10, 50, 10, i+1))
             elif self.spells_id[i] == 1:
                 self.spells.append(Flash(self, self.win, 15, 250, 20, i+1))
             elif self.spells_id[i] == 2:
-                self.spells.append(Damage_Boost(self, self.win, 30, 40, 7, 3, i+1))
+                self.spells.append(Damage_Boost(self, self.win, 30, 3, 40, 7, i+1))
 
     def tick(self, keys, walls, delta_tm, enemies):  # wykonuje się raz na powtórzenie pętli
         self.enemies = enemies
