@@ -250,7 +250,7 @@ class Waves_Tab:
         ]
 
         self.lvl_3 = [
-            [1, 0],
+            [0, 1],
         ]
 
         self.lvl_4 = [

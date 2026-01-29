@@ -666,71 +666,34 @@ class Fire_Bug(Enemy):
 
 
 class Fire_Bee(Enemy):
-    def __init__(self, hp, cd, dmg, max_speed):
-        self.fly_right_img = [pygame.image.load(f'graph/enemy/lvl3/bee/bee_{x}.png') for x in range(1, 4)]  # animacja chodzenia
-        self.fly_left_img = [pygame.transform.flip(pygame.image.load(f'graph/enemy/lvl3/bee/bee_{x}.png'), True, False) for x in range(1, 4)]
-        self.angry_right = pygame.image.load('graph/enemy/lvl3/bee/bee_angry.png')
-        self.angry_left = pygame.transform.flip(pygame.image.load('graph/enemy/lvl3/bee/bee_angry.png'), True, False)
-
+    def __init__(self, hp, cd, dmg, max_speed, x_self=0, y_self=0):
         x = randint(100, 1800)
-        y = randint(700, 750)
+        y = randint(100, 200)
+        self.max_speed = randint(2, max_speed)
+        Enemy.__init__(self, x, y, hp, cd, dmg, 0.5, self.max_speed, 'graph/enemy/lvl1/ghost', 'graph/spels/none_icon.png', False, True)
+        self.gravity = 0.03
 
-        Enemy.__init__(self, x, y, hp, cd, dmg, 0.5, max_speed, 'graph/enemy/lvl3/bee/bee_1')
-        self.gravity = 0.15
-
-        self.move_side = 0
-        self.clock_move = 0
-        self.angry = False
-        self.direction = 0
-        self.index = 0
-
-        self.change_move_time = 5
-
+    def self_explode(self):
+        self.dealt_dmg(self.hp)
+    
     def tick(self, walls, player, delta):
-        self.clock_move += delta
         self.physic_tick(walls)
         self.health_tick(delta)
 
-        if self.clock_move >= self.change_move_time:
-            self.move_side = randint(0, 3)
+        if not self.hitbox.colliderect(player.hitbox):
+            if self.y_cord > player.y_cord + 15:
+                self.go_up()
+            if self.x_cord > player.x_cord:
+                self.go_left()
+            elif self.x_cord < player.x_cord:
+                self.go_right()
 
-        if self.hor_velocity > 0:
-            self.direction = 1
-        elif self.hor_velocity < 0:
-            self.direction = 0
+        if self.hitbox.colliderect(player.hitbox):
+            self.self_explode()
 
-        if self.move_side == 0:
-            if self.y_cord >= 750:
-                self.move_side = 1
-                #self.clock_move = 0
-        elif self.move_side == 1:
-            self.go_up()
-            if self.y_cord <= 10:
-                self.move_side = 0
-                #self.clock_move = 0
-        elif self.move_side == 2:
-            self.go_left()
-            if self.x_cord < 10:
-                self.move_side = 3
-                #self.clock_move = 0
-        elif self.move_side == 3:
-            self.go_right()
-            if self.x_cord >= 1880:
-                self.move_side = 2
-                #self.clock_move = 0
-
-        if self.hp < self.max_hp:
-            self.angry = True
-
-    def draw(self, window):
-        if self.hor_velocity != 0:
-            if self.direction == 1:
-                window.blit(self.fly_right_img[floor(self.index)], (self.x_cord, self.y_cord))
-            elif self.direction == 0:
-                window.blit(self.fly_left_img[floor(self.index)], (self.x_cord, self.y_cord))
-            self.index += 0.4
-            if self.index > 3:
-                self.index = 0
+        for w in walls:
+            if self.hitbox.colliderect(w.hitbox):
+                self.self_explode()
 
 ####################################################################################################################
 # Plants
